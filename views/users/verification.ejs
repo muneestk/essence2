@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Sign up</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+
+<body class="img js-fullheight" style="background-image: url(/adminAssets/images/dashboard/img_2.jpg);">
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center mb-5">
+                    <h2 class="heading-section">Sign up</h2>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="login_form_inner">
+                        <h3 class="text-light d-flex justify-content-center">Log in to enter</h3>
+                        <form class="login_form" action="" method="post" id="contactForm" novalidate="novalidate">
+                            <div class="form-group">
+                                <input type="number" class="form-control" id="otp" name="otp"
+                                    placeholder="Enter the OTP sent to your email" required>
+                            </div>
+                            <div class="form-group d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                            </div>
+                            <% if (typeof message !=='undefined' ) { %>
+                                <span>
+                                    <%= message %>
+                                </span>
+                                <% } %>
+                                    <div class="pt-5 form-group d-md-flex justify-content-between">
+                                        <div class="text-md-right">
+                                            <h6><a href="/login" style="color: #fff;">Already have an account? <span
+                                                        class="text-primary">Sign In</span></a></h6>
+                                        </div>
+                                    </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+    </section>
+    <!-- Bootstrap js -->
+    <script src="/users/js/bootstrap.min.js"></script>
+</body>
+
+</html>

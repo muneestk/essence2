@@ -1,0 +1,201 @@
+<%- include('../userlayout/header.ejs') %>
+    <%- include('../userlayout/navbar.ejs') %>
+
+
+        <!-- Ec breadcrumb start -->
+        <div class="sticky-header-next-sec  ec-breadcrumb section-space">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row ec_breadcrumb_inner">
+                            <div class="col-md-6 col-sm-12">
+                                <h2 class="ec-breadcrumb-title">User Profile</h2>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <!-- ec-breadcrumb-list start -->
+                                <ul class="ec-breadcrumb-list">
+                                    <li class="ec-breadcrumb-item"><a href="index.html">Home</a></li>
+                                    <li class="ec-breadcrumb-item active">My Orders</li>
+                                </ul>
+                                <!-- ec-breadcrumb-list end -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Ec breadcrumb end -->
+
+        <!-- User profile section -->
+        <section class="ec-page-content ec-vendor-uploads ec-user-account section-space-p">
+            <div class="container">
+                <div class="row">
+                    <!-- Sidebar Area Start -->
+                    <div class="ec-shop-leftside ec-vendor-sidebar col-lg-3 col-md-12">
+                        <div class="ec-sidebar-wrap">
+                            <!-- Sidebar Category Block -->
+                            <div class="ec-sidebar-block">
+                                <div class="ec-vendor-block">
+                                    <div class="ec-vendor-block-bg"></div>
+                                    <div class="ec-vendor-block-detail">
+                                        <img class="v-img" src="assets/images/user/1.jpg" alt="vendor image">
+                                        <h5>
+                                            <%= user.name %>
+                                        </h5>
+                                    </div>
+                                    <div class="ec-vendor-block-items">
+                                        <ul>
+                                            <li><a href="/user-profile">User Profile</a></li>
+                                            <li><a href="/my-orders">My Orders</a></li>
+                                            <li><a href="/cart-page">My cart</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ec-shop-rightside col-lg-9 col-md-12">
+                        <div class="ec-vendor-dashboard-card ec-vendor-setting-card">
+                            <div class="ec-vendor-card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="ec-vendor-block-profile">
+                                            <div class="ec-vendor-block-img space-bottom-30 ">
+                                                <div class="ec-vendor-block-bg d-flex justify-content-end p-5">
+                                                    <button class="btn btn-success " data-bs-toggle="modal"
+                                                        data-bs-target="#edit_modal-<%= user._id %>">Edit
+                                                        Detail</button>
+
+                                                </div>
+                                                <div class="ec-vendor-block-detail">
+                                                    <img class="v-img" src="assets/images/user/1.jpg"
+                                                        alt="vendor image">
+                                                    <h5 class="name">
+                                                        <%= user.name %>
+                                                    </h5>
+
+                                                </div>
+                                                <p>Hello <span>
+                                                        <%= user.name %>!
+                                                    </span></p>
+                                                <p>From your account you can easily view and track orders. You can
+                                                    manage and change your account information like address, contact
+                                                    information and history of orders.</p>
+                                            </div>
+                                            <h5>Account Information</h5>
+
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div
+                                                        class="ec-vendor-detail-block ec-vendor-block-email space-bottom-30">
+                                                        <h6>E-mail address <a href="javasript:void(0)"
+                                                                data-link-action="editmodal" title="Edit Detail"
+                                                                data-bs-toggle="modal" data-bs-target="#edit_modal"><img
+                                                                    src="assets/images/icons/edit.svg"
+                                                                    class="svg_img pro_svg" alt="edit" /></a></h6>
+                                                        <ul>
+                                                            <li><strong>Email : </strong>
+                                                                <%= user.email %>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div
+                                                        class="ec-vendor-detail-block ec-vendor-block-contact space-bottom-30">
+                                                        <h6>Contact nubmer<a href="javasript:void(0)"
+                                                                data-link-action="editmodal" title="Edit Detail"
+                                                                data-bs-toggle="modal" data-bs-target="#edit_modal"><img
+                                                                    src="assets/images/icons/edit.svg"
+                                                                    class="svg_img pro_svg" alt="edit" /></a></h6>
+                                                        <ul>
+                                                            <li><strong>Phone Nubmer : </strong>
+                                                                <%= user.mobile %>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="col-md-6 col-sm-12">
+                                            <div class="ec-vendor-detail-block ec-vendor-block-address mar-b-30">
+                                                <h6>Address<a href="javasript:void(0)" data-link-action="editmodal" title="Edit Detail" data-bs-toggle="modal" data-bs-target="#edit_modal"><img src="assets/images/icons/edit.svg"
+                                                    class="svg_img pro_svg" alt="edit" /></a></h6>
+                                                <ul>
+                                                    <li><strong>Home : </strong>123, 2150 Sycamore Street, dummy text of
+                                                        the, San Jose, California - 95131.</li>
+                                                </ul>
+                                            </div>
+                                        </div> -->
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="edit_modal-<%= user._id %>" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="ec-vendor-block-img space-bottom-30">
+                                    <div class="ec-vendor-block-bg cover-upload">
+                                        <div class="thumb-upload">
+
+                                        </div>
+                                    </div>
+                                    <div class="ec-vendor-block-detail">
+                                        <div class="thumb-upload">
+
+
+                                        </div>
+                                    </div>
+                                    <div class="ec-vendor-upload-detail">
+                                        <form action="/update-user" method="post" class="row g-3">
+                                            <div class="col-md space-t-15">
+                                                <label class="form-label">name</label>
+                                                <input type="text" class=" text-dark" value="<%= user.name %>"
+                                                    name="name">
+                                            </div>
+                                            <br>
+                                            <div class="col-md space-t-15 mt-2">
+                                                <label class="form-label">mobile</label>
+                                                <input type="text" class=" text-dark" value="<%= user.mobile %>"
+                                                    name="mobile">
+                                            </div>
+                                            <input type="hidden" value="<%= user._id %>" name="id">
+                                            <div class="col-md-12 space-t-15 mt-5">
+                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                <button class="btn btn-lg btn-secondary qty_close"
+                                                    data-bs-dismiss="modal" aria-label="Close">Close</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal end -->
+
+        </section>
+        <!-- End User profile section -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <%- include('../userlayout/footer.ejs') %>

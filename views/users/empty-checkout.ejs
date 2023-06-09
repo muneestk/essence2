@@ -1,0 +1,120 @@
+<%- include('../userlayout/header.ejs') %>
+  <%- include('../userlayout/navbar.ejs') %>
+
+
+
+    <!-- Ec breadcrumb start -->
+    <div class="sticky-header-next-sec ec-breadcrumb section-space-mb">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="row ec_breadcrumb_inner">
+              <div class="col-md-6 col-sm-12">
+                <h2 class="ec-breadcrumb-title">Checkout</h2>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <!-- ec-breadcrumb-list start -->
+                <ul class="ec-breadcrumb-list">
+                  <li class="ec-breadcrumb-item"><a href="index.html">Home</a></li>
+                  <li class="ec-breadcrumb-item active">Checkout</li>
+                </ul>
+                <!-- ec-breadcrumb-list end -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Ec breadcrumb end -->
+    <div class="container">
+      <div class="row">
+        <div class="col-8 d-flex justify-content-end pb-2">
+          <a href="/add-address"><button type="button" class=" btn-success">ADD ADDRESS</button></a>
+        </div>
+        <div class="col-4">
+        </div>
+      </div>
+    </div>
+
+    <!-- Ec checkout page -->
+    <section class="ec-page-content">
+      <div class="container">
+        <div class="row">
+          <!-- Sidebar Area Start -->
+          <div class="ec-checkout-rightside col-lg-4 col-md-12">
+            <div class="ec-sidebar-wrap">
+              <!-- Sidebar Summary Block -->
+              <div class="ec-sidebar-block">
+                <div class="ec-sb-title">
+                  <h3 class="ec-sidebar-title">Summary</h3>
+                </div>
+                <div class="ec-sb-block-content">
+                  <div class="ec-checkout-summary">
+                    <div>
+                      <span class="text-left">Sub-Total</span>
+                      <span class="text-right">$<%= Total %>.00</span>
+                    </div>
+                    <div>
+                      <span class="text-left">Delivery Charges</span>
+                      <span class="text-right">$80.00</span>
+                    </div>
+                    <div>
+                      <span class="text-left">Coupon Discount</span>
+                      <span class="text-right"><a class="ec-checkout-coupon">Apply Coupon</a></span>
+                    </div>
+                    <div class="ec-checkout-coupon-content">
+                      <form class="ec-checkout-coupon-form" name="ec-checkout-coupon-form" method="post" action="#">
+                        <input class="ec-coupon" type="text" required="" placeholder="Enter Your Coupon Code"
+                          name="ec-coupon" value="">
+                        <button class="ec-coupon-btn button btn-primary" type="submit" name="subscribe"
+                          value="">Apply</button>
+                      </form>
+                    </div>
+                    <div class="ec-checkout-summary-total">
+                      <span class="text-left">Total Amount</span>
+                      <span class="text-right">$<%= totalAmount %>.00</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Sidebar Summary Block -->
+            </div>
+            <div class="ec-sidebar-wrap ec-checkout-del-wrap">
+              <!-- Sidebar Summary Block -->
+
+              <!-- Sidebar Summary Block -->
+            </div>
+            <div class="ec-sidebar-wrap ec-checkout-pay-wrap">
+              <!-- Sidebar Payment Block -->
+              <div class="ec-sidebar-block">
+                <div class="ec-sb-title">
+                  <h3 class="ec-sidebar-title">Payment Method</h3>
+                </div>
+                <div class="ec-sb-block-content">
+                  <div class="ec-checkout-pay">
+                    <div class="ec-pay-desc">Please select the preferred payment method to use on this order.</div>
+                    <form action="#">
+                      <span class="ec-pay-option">
+                        <span>
+                          <input type="radio" id="pay1" name="radio-group" checked>
+                          <label for="pay1">Cash On Delivery</label>
+                        </span>
+                      </span>
+                      <div>
+                        <button type="submit" class="btn-primary">PLACE ORDER</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <!-- Sidebar Payment Block -->
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <%- include('../userlayout/footer.ejs') %>

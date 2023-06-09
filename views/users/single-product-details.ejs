@@ -1,0 +1,154 @@
+<%- include('../userlayout/header.ejs') %>
+    <%- include('../userlayout/navbar.ejs') %>
+
+
+
+        <!-- Start Single product -->
+        <section class="ec-page-content section-space-p bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="ec-pro-rightside ec-common-rightside col-lg-12 col-md-12">
+
+                        <!-- Single product content Start -->
+                        <div class="single-pro-block">
+                            <div class="single-pro-inner">
+                                <div class="row">
+                                    <div class="single-pro-img single-pro-img-no-sidebar">
+                                        <div class="single-product-scroll">
+                                            <div class="single-product-cover">
+                                                <div class="single-slide zoom-image-hover">
+                                                    <img class="img-responsive"
+                                                        src="/adminAssets/adminImages/<%= product.image[0]  %>" alt="">
+                                                </div>
+                                                <div class="single-slide zoom-image-hover">
+                                                    <img class="img-responsive"
+                                                        src="/adminAssets/adminImages/<%= product.image[1]  %>" alt="">
+                                                </div>
+                                                <div class="single-slide zoom-image-hover">
+                                                    <img class="img-responsive"
+                                                        src="/adminAssets/adminImages/<%= product.image[2]  %>" alt="">
+                                                </div>
+                                                <div class="single-slide zoom-image-hover">
+                                                    <img class="img-responsive"
+                                                        src="/adminAssets/adminImages/<%= product.image[1]  %>" alt="">
+                                                </div>
+                                                <div class="single-slide zoom-image-hover">
+                                                    <img class="img-responsive"
+                                                        src="/adminAssets/adminImages/<%= product.image[2]  %>" alt="">
+                                                </div>
+                                            </div>
+                                            <div class="single-nav-thumb">
+                                                <div class="single-slide">
+                                                    <img class="img-responsive"
+                                                        src="/adminAssets/adminImages/<%= product.image[0]  %>" alt="">
+                                                </div>
+                                                <div class="single-slide">
+                                                    <img class="img-responsive"
+                                                        src="/adminAssets/adminImages/<%= product.image[1]  %>" alt="">
+                                                </div>
+                                                <div class="single-slide">
+                                                    <img class="img-responsive"
+                                                        src="/adminAssets/adminImages/<%= product.image[2]  %>" alt="">
+                                                </div>
+                                                <div class="single-slide">
+                                                    <img class="img-responsive"
+                                                        src="/adminAssets/adminImages/<%= product.image[1]  %>" alt="">
+                                                </div>
+                                                <div class="single-slide">
+                                                    <img class="img-responsive"
+                                                        src="/adminAssets/adminImages/<%= product.image[2]  %>" alt="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="single-pro-desc single-pro-desc-no-sidebar">
+                                        <div class="single-pro-content">
+                                            <h5 class="ec-single-title">
+                                                <%= product.productname %>
+                                            </h5>
+
+                                            <div class="ec-single-desc">
+                                                <%= product.description %>
+                                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum
+                                                    iure eum vitae reprehenderit nihil sunt veniam! Quisquam
+                                                    voluptatibus sit id nemo nihil! Inventore cupiditate distinctio
+                                                    ducimus perspiciatis officiis tempora alias. Lorem ipsum dolor sit
+                                                    amet consectetur adipisicing elit. Hic reprehenderit, tempore aut at
+                                                    aspernatur magni placeat adipisci magnam eaque cupiditate reiciendis
+                                                    est autem molestias, a fugit totam. Minima, unde reprehenderit.
+                                            </div>
+                                            <div class="ec-single-price-stoke">
+                                                <div class="ec-single-price">
+                                                    <span class="ec-single-ps-title">As low as</span>
+                                                    <span class="new-price">$<%= product.price %>.00</span>
+                                                </div>
+                                                <div class="ec-single-stoke">
+                                                    <% if(product.quantity.length !=0){ %>
+                                                        <span class="ec-single-ps-title text-success">IN STOCK</span>
+                                                        <% }else{ %>
+                                                            <span class="ec-single-ps-title text-danger">OUT OF
+                                                                STOCK</span>
+                                                            <% } %>
+                                                </div>
+                                            </div>
+                                            <p class="ps-2">Quantity:<%= product.quantity %>
+                                            </p>
+                                            <div class="ec-single-qty">
+
+
+                                                <div class="ec-single-cart ">
+
+                                                    <button class="btn btn-primary"
+                                                        onclick="addtocart('<%=product._id%>')">Add To Cart</button>
+                                                </div>
+                                                <div class="ec-single-wishlist">
+                                                    <a class="ec-btn-group wishlist" title="Wishlist"><img
+                                                            src="assets/images/icons/wishlist.svg"
+                                                            class="svg_img pro_svg" alt="" /></a>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Single product content End -->
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <!-- End Single product -->
+
+
+        <!-- =======ajax for add to cart ========-->
+        <script>
+
+            function addtocart(productid) {
+                $.ajax({
+                    url: "/addtocart",
+                    method: "post",
+                    data: {
+                        id: productid
+                    },
+                    success: (response) => {
+                        if (response.success) {
+                            swal.fire({
+                                positon: 'center',
+                                icon: "success",
+                                title: 'product added to cart',
+                                showConfirmButton: false,
+                                timer: 1500,
+                            })
+                        }
+                    }
+                })
+            }
+
+
+        </script>
+
+        <%- include('../userlayout/footer.ejs') %>

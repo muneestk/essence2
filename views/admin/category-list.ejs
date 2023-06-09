@@ -1,0 +1,98 @@
+<%- include('../adminlayout/header.ejs') %>
+<%- include('../adminlayout/sidebar.ejs') %>
+<%- include('../adminlayout/navbar.ejs') %>
+
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="card-body">
+        <h4 class="card-title">CATEGORY LIST</h4>
+        <span>
+          <% if(typeof message !== 'undefined'){ %>
+            <p style="text-align: center; color: red;">
+              <%= message %>
+            </p>
+          <% } %>
+        </span>
+
+        <a type="button" class="btn btn-secondary w-60" style="margin-top: 80px; margin-left: 10px;"
+          data-bs-toggle="modal" data-bs-target="#addcategory">
+          <i title="Add Category" class="fa fa-plus"></i> ADD CATEGORY
+        </a>
+
+        <div class="modal fade" id="addcategory" tabindex="-1" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title fs-5" id="exampleModalLabel">ADD CATEGORY</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form class="forms-sample" method="post" action="/admin/insert-category">
+                  <div class="form-group">
+                    <label for="exampleInputName1">CATEGORY NAME</label>
+                    <input type="text" class="form-control" id="exampleInputName1" placeholder="Name"
+                      name="categoryname">
+                  </div>
+                  <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                  <button class="btn btn-dark" id="Cancel">Cancel</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Name</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if(category.length > 0){ %>
+                <% for(let i = 0; i < category.length; i++){ %>
+                  <tr>
+                    <td><%= i+1 %></td>
+                    <td><%= category[i].categoryname %></td>
+                    <td>
+                      <a type="button" class="btn btn-success" href="/admin/edit-category?id=<%= category[i]._id %>">Edit</a>
+                      <a class="btn btn-danger" data-toggle="modal" data-target="#deleteModal<%= i %>">Delete</a>
+                    </td>
+                  </tr>
+                  <!-- Modal -->
+                  <div class="modal fade" id="deleteModal<%= i %>">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Delete Category</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Are you sure you want to delete <%= category[i].categoryname %>?</p>
+                        </div>
+                        <div class="modal-footer">
+                          <a href="/admin/category-list">
+                            <button type="button" class="btn btn-secondary" id="close-modal">No</button>
+                          </a>
+                          <a class="btn btn-danger" href="/admin/delete-category?id=<%= category[i]._id %>">Yes</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <% } %>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../adminlayout/footer.ejs') %>

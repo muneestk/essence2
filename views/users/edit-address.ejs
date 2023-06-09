@@ -1,0 +1,56 @@
+<%- include('../userlayout/header.ejs') %>
+    <%- include('../userlayout/navbar.ejs') %>
+
+
+        <!--================Checkout Area =================-->
+        <section class="checkout_area section_gap">
+            <div class="container">
+                <div class="billing_details">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <h3>Edit Address</h3>
+                            <form class="row contact_form" action="/update-address/?id=<%= address._id %>"
+                                method="post">
+                                <div class="col-md-6 form-group">
+                                    <label>Name</label><br>
+                                    <input type="text" class="" value="<%= address.username %>" name="username"
+                                        required>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Mobile</label><br>
+                                    <input type="number" value="<%= address.mobile %>" name="mobile" required>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>House Name</label><br>
+                                    <input type="text" value="<%= address.housename %>" name="housename" required>
+                                </div>
+                                <div class="col-md-12 form-group">
+                                    <label>Your Landmark</label><br>
+                                    <input type="text" value="<%= address.landmark %>" name="landmark" required>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>City</label><br>
+                                    <input type="text" value="<%= address.city %>" name="city" required>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>State</label><br>
+                                    <input type="text" value="<%= address.city %>" name="state" required>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Pincode</label><br>
+                                    <input type="number" value="<%= address.pincode %>" name="pincode" required>
+                                </div>
+                                <div class="col-md-12 form-group">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+        <%- include('../userlayout/footer.ejs') %>

@@ -1,0 +1,252 @@
+<%- include('../userlayout/header.ejs') %>
+    <%- include('../userlayout/navbar.ejs') %>
+
+
+        <!-- Ec breadcrumb start -->
+        <div class="sticky-header-next-sec  ec-breadcrumb section-space-mb">
+            <div class="container">
+                <div class="col-md-6 col-sm-12">
+                    <h2 class="ec-breadcrumb-title">Shop</h2>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <!-- ec-breadcrumb-list start -->
+                    <ul class="ec-breadcrumb-list">
+                        <li class="ec-breadcrumb-item"><a href="/home-page">Home</a></li>
+                        <li class="ec-breadcrumb-item active">Shop</li>
+                    </ul>
+                    <!-- ec-breadcrumb-list end -->
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <!-- Ec breadcrumb end -->
+
+
+ <div id="relodDiv">
+        <!-- Ec Shop page -->
+        <section class="ec-page-content-bnr section-space-pb bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="ec-shop-rightside col-lg-9 order-lg-last col-md-12 order-md-first margin-b-30">
+                        <!-- Shop Top Start -->
+                        <div class="ec-pro-list-top d-flex">
+                            <div class="col-md-6 ec-grid-list">
+
+                            </div>
+                            <div class="col-md-6 ec-sort-select">
+                                <span class="sort-by">Sort by</span>
+                                <div class="ec-select-inner">
+                                    <select name="ec-select" id="ec-select">
+                                        <option selected disabled>Position</option>
+                                        <option value="1">Relevance</option>
+                                        <option value="2">Name, A to Z</option>
+                                        <option value="3">Name, Z to A</option>
+                                        <option value="4">Price, low to high</option>
+                                        <option value="5">Price, high to low</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Shop Top End -->
+
+                        <!-- Shop content Start -->
+
+
+
+
+
+                        <div class="shop-pro-content">
+                            <div class="shop-pro-inner">
+                                <div class="row">
+
+                                    <% if(product.length> 0){
+                                        for(let i=0;i<product.length;i++){ %>
+
+
+                                            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 mb-6 pro-gl-content">
+                                                <div class="ec-product-inner">
+                                                    <div class="ec-pro-image-outer">
+                                                        <div class="ec-pro-image">
+                                                            <a href="/showProduct?id=<%= product[i]._id %>" class="">
+                                                                <img class="main-image"
+                                                                    src="/adminAssets/adminImages/<%= product[i].image[0]  %>"
+                                                                    alt="Product image" width="250px" height="300px" />
+
+                                                            </a>
+                                                            <span class="percentage">20%</span>
+
+                                                            <div class="ec-pro-actions">
+                                                                <button title="Add To Cart"
+                                                                    onclick="addtocart('<%=product[i]._id%>')"
+                                                                    class=" add-to-cart"><img
+                                                                        src="assets/images/icons/cart.svg"
+                                                                        class="svg_img pro_svg" alt="" /> Add To
+                                                                    Cart</button>
+                                                                <a class="ec-btn-group wishlist" title="Wishlist"><img
+                                                                        src="assets/images/icons/wishlist.svg"
+                                                                        class="svg_img pro_svg" alt="" /></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ec-pro-content">
+                                                        <p>
+                                                            <%= product.brand %>
+                                                        </p>
+                                                        <h5 class="ec-pro-title"><a
+                                                                href="/showProduct?id=<%= product[i]._id %>">
+                                                                <%= product[i].productname %>
+                                                            </a></h5>
+
+                                                        <div class="ec-pro-list-desc"></div>
+                                                        <span class="ec-price">
+                                                            <span class="new-price">$ <%= product[i].price %>.00</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <% } } %>
+
+                                </div>
+                            </div>
+
+
+
+
+                            <!-- Ec Pagination Start -->
+                            <div class="ec-pro-pagination">
+                                <span>Showing 1-12 of 21 item(s)</span>
+                                <ul class="ec-pro-pagination-inner">
+                                    <li><a class="active" href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li><a class="next" href="#">Next <i class="ecicon eci-angle-right"></i></a></li>
+                                </ul>
+                            </div>
+                            <!-- Ec Pagination End -->
+                        </div>
+                        <!--Shop content End -->
+
+
+
+                    </div>
+                    <!-- Sidebar Area Start -->
+                    <div class="ec-shop-leftside col-lg-3 order-lg-first col-md-12 order-md-last">
+                        <div id="shop_sidebar">
+                            <div class="ec-sidebar-heading">
+                                <h1>Filter Products By</h1>
+                            </div>
+                            <div class="ec-sidebar-wrap">
+                                <!-- Sidebar Category Block -->
+                                <div class="ec-sidebar-block">
+                                    <div class="ec-sb-title">
+                                        <h3 class="ec-sidebar-title">Category</h3>
+                                    </div>
+                                    <div class="ec-sb-block-content">
+                                        <ul>
+                                            <% if(category.length>0){
+                                                for(let i=0;i<category.length;i++){ %>
+
+                                                    <li>
+                                                        <div class="ec-sidebar-block-item">
+                                                           
+
+                                                              <a onclick="catFilter('<%= category[i].categoryname %>')">
+                                                                <%= category[i].categoryname %>
+                                                            </a>
+                                                        </div>
+                                                    </li>
+
+                                                    <% } } %>
+                                                    <li>
+                                                        <div class="ec-sidebar-block-item">
+                                                           
+
+                                                              <a href="/shop-page">
+                                                                All
+                                                            </a>
+                                                        </div>
+                                                    </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Sidebar Size Block -->
+                        
+
+                                <!-- Sidebar Price Block -->
+                                <div class="ec-sidebar-block">
+                                    <div class="ec-sb-title">
+                                        <h3 class="ec-sidebar-title">Price</h3>
+                                    </div>
+                                    <div class="ec-sb-block-content es-price-slider">
+                                        <div class="ec-price-filter">
+                                            <div id="ec-sliderPrice" class="filter__slider-price" data-min="0"
+                                                data-max="250" data-step="10"></div>
+                                            <div class="ec-price-input">
+                                                <label class="filter__label"><input type="text"
+                                                        class="filter__input"></label>
+                                                <span class="ec-price-divider"></span>
+                                                <label class="filter__label"><input type="text"
+                                                        class="filter__input"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+        <script>
+
+            function addtocart(productid) {
+                $.ajax({
+                    url: "/addtocart",
+                    method: "post",
+                    data: {
+                        id: productid
+                    },
+                    success: (response) => {
+                        if (response.success) {
+                            swal.fire({
+                                positon: 'center',
+                                icon: "success",
+                                title: 'product added to cart',
+                                showConfirmButton: false,
+                                timer: 1500,
+                            })
+                        }
+                    }
+                })
+            }
+
+
+            function catFilter(category) {
+    $.ajax({
+        url: "/filter-category",
+        method: 'post',
+        dataType: 'json',
+        data: { category: category },
+        success: (response) => {
+            if (response.success) {
+                $('#relodDiv').html(response.html);
+            }
+        },
+        error: (error) => {
+            console.log(error.message);
+        }
+    });
+}
+
+
+
+        </script>
+
+        <%- include('../userlayout/footer.ejs') %>

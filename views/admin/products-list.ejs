@@ -1,0 +1,85 @@
+<%- include('../adminlayout/header.ejs') %>
+  <%- include('../adminlayout/sidebar.ejs') %>
+    <%- include('../adminlayout/navbar.ejs') %>
+
+      <div class="col-lg-12 grid-margin stretch-card pt-5">
+        <div class="card">
+          <div class="card-body ">
+            <h4 class="card-title pt-3">Product List</h4>
+            <div class="table-responsive">
+              <table class="table table-dark">
+                <thead>
+                  <tr>
+                    <th> No. </th>
+                    <th> Image </th>
+                    <th> Product Name </th>
+                    <th> Brand </th>
+                    <th> Category </th>
+                    <th> Quantity </th>
+                    <th> Price </th>
+                    <th> Action </th>
+                  </tr>
+                  <% if (product.length> 0) {
+                    for (let i = 0; i < product.length; i++) { %>
+                      <tr>
+                        <td>
+                          <%= i + 1 %>
+                        </td>
+                        <td>
+                          <% for (let j=0; j < 1; j++) { %>
+                            <img style="width:50px ; height:50px" src="/adminAssets/adminImages/<%= product[i].image[j] %>"
+                              alt="No image">
+                            <% } %>
+                        </td>
+                        <td>
+                          <%= product[i].productname %>
+                        </td>
+                        <td>
+                          <%= product[i].brand %>
+                        </td>
+                        <td>
+                          <%= product[i].category %>
+                        </td>
+                        <td>
+                          <%= product[i].quantity %>
+                        </td>
+                        <td>
+                          <%= product[i].price %>
+                        </td>
+                        <td><a class="btn btn-danger" data-toggle="modal" data-target="#deleteModal<%= product[i]._id  %>" >Delete</a>
+                          <a class="btn btn-primary" href="/admin/edit-product/<%= product[i]._id %>">Edit</a>
+
+                          <!-- Modal -->
+                  <div class="modal fade" id="deleteModal<%= product[i]._id %>">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Delete Product</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Are you sure you want to delete <%= product[i].productname %>?</p>
+                        </div>
+                        <div class="modal-footer">
+                          <a href="/admin/products-list">
+                            <button type="button" class="btn btn-secondary" id="close-modal">No</button>
+                          </a>
+                          <a class="btn btn-danger"  href="/admin/delete-product?id=<%= product[i]._id%>">Yes</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                        </td>
+                      </tr>
+                      <% } } %>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%- include('../adminlayout/footer.ejs') %>

@@ -1,0 +1,238 @@
+<%- include('../userlayout/header.ejs') %>
+    <%- include('../userlayout/navbar.ejs') %>
+        <style>
+            .button-minus,
+            .button-plus {
+                width: 30px;
+                height: 30px;
+                line-height: 0;
+            }
+
+            .quantity-field {
+                max-width: 70px;
+            }
+        </style>
+        <div id="reloadDiv">
+
+            <section class="ec-page-content section-space-p">
+                <div class="container">
+                    <div class="row">
+                        <div class="ec-cart-leftside col-lg-8 col-md-12">
+                            <div class="ec-cart-content">
+                                <div class="ec-cart-inner">
+                                    <div class="row">
+                                        <form action="#">
+                                            <div class="table-content cart-table-content">
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Product</th>
+                                                            <th>Price</th>
+                                                            <th style="text-align: center;">Quantity</th>
+                                                            <th>Total</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% if (products.length> 0) {
+                                                            products.forEach(product => { %>
+                                                            <tr>
+                                                                <td data-label="Product" class="ec-cart-pro-name">
+                                                                    <a href="product-left-sidebar.html">
+                                                                        <img class="ec-cart-pro-img mr-4"
+                                                                            src="/adminAssets/adminImages/<%= product.productid.image[0] %>"
+                                                                            alt="" />
+                                                                        <%= product.productid.productname %>
+                                                                    </a>
+                                                                </td>
+                                                                <td data-label="Price" class="ec-cart-pro-price">
+                                                                    <span class="amount">
+                                                                        $<%= product.productPrice %>.00
+                                                                    </span>
+                                                                </td>
+                                                                <td data-label="Quantity" class="ec-cart-pro-qty"
+                                                                    style="text-align: center;">
+                                                                    <div
+                                                                        class="input-group w-auto justify-content-center align-items-center">
+                                                                        <div class="input-group-prepend">
+                                                                            <button type="button"
+                                                                                class="btn btn-sm  button-minus"
+                                                                                data-field="quantity"
+                                                                                onclick="changeQuantity('<%=userId%>','<%=product.productid._id%>',-1)">
+                                                                                <p class="fs-5">-</p>
+                                                                            </button>
+                                                                        </div>
+                                                                        <input type="text" value="<%= product.count %>"
+                                                                            name="quantity"
+                                                                            class="quantity-field  text-center form-control text-dark"
+                                                                            readonly>
+                                                                        <div class="input-group-append">
+                                                                            <button type="button"
+                                                                                class="btn btn-sm   button-plus"
+                                                                                data-field="quantity"
+                                                                                onclick="changeQuantity('<%=userId%>','<%=product.productid._id%>',1)">
+                                                                                <p class="fs-5">+</p>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+
+
+                                                                <td data-label="Total" class="ec-cart-pro-subtotal">$
+                                                                    <%=product.totalPrice %>
+                                                                </td>
+                                                                <td data-label="Remove" class="ec-cart-pro-remove">
+                                                                    <a
+                                                                        onclick="deleteCart('<%= userId %>','<%= product.productid._id %>')"><i
+                                                                            class="ecicon eci-trash-o"></i></a>
+
+                                                                </td>
+                                                            </tr>
+                                                            <% }); %>
+                                                                <% } else { %>
+                                                                    <tr>
+                                                                        <td colspan="5" class="text-center">No Products
+                                                                            Added to Cart</td>
+
+                                                                    </tr>
+                                                                    <% } %>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="ec-cart-update-bottom">
+                                                        <a href="/shop-page">Continue Shopping</a>
+                                                        <a href="/checkout-page" class="btn btn-primary">Check Out</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% if (typeof message !=='undefined' ) { %>
+                            <p style="text-align: center;color: red;">
+                                <%= message %>
+                            </p>
+                            <% } %>
+
+                                <div class="ec-cart-rightside col-lg-4 col-md-12">
+                                    <div class="ec-sidebar-wrap">
+                                        <div class="ec-sb-block-content">
+                                            <div class="ec-cart-summary-bottom">
+                                                <div class="ec-cart-summary">
+                                                    <div>
+                                                        <span class="text-left">Sub-Total</span>
+                                                        <span class="text-right">$<%= Total %>.00</span>
+                                                    </div>
+                                                    <div>
+                                                        <span class="text-left">Delivery Charges</span>
+                                                        <span class="text-right">$80.00</span>
+                                                    </div>
+
+                                                    <div class="ec-cart-summary-total">
+                                                        <span class="text-left">Total Amount</span>
+                                                        <span class="text-right">$<%= totalAmount %>.00 </span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+
+
+        <script>
+            function changeQuantity(userId, proId, count) {
+                $.ajax({
+                    url: '/change-quantity',
+                    data: {
+                        user: userId,
+                        product: proId,
+                        count: count
+                    },
+                    method: 'post',
+                    success: (response) => {
+                        if (response.success) {
+
+                            $('#reloadDiv').load('/cart-page #reloadDiv')
+                        } else if (response.check) {
+                            swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Out of stock'
+                            });
+                        }
+                    },
+                    error: (error) => {
+                        console.log(error);
+                    }
+                });
+            }
+
+
+
+            function deleteCart(userId, proId) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You want to delete!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/delete-Cart-product",
+                            data: {
+                                product: proId
+                            },
+                            method: 'post',
+                            success: (response) => {
+                                console.log(response);
+                                if (response.success) {
+                                    $('#reloadDiv').load('/cart-page #reloadDiv', () => {
+                                        Swal.fire({
+                                            title: 'Deleted!',
+                                            text: 'Your item has been deleted.',
+                                            icon: 'success',
+                                            timer: 1500,
+                                            showConfirmButton: false
+                                        });
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: 'Failed to delete item.',
+                                        icon: 'error',
+                                        showConfirmButton: false
+                                    });
+                                }
+                            },
+                            error: (error) => {
+                                console.log(error);
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'An error occurred while deleting the item.',
+                                    icon: 'error',
+                                    showConfirmButton: false
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        </script>
+
+
+        <%- include('../userlayout/footer.ejs') %>

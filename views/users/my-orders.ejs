@@ -1,0 +1,111 @@
+<%- include('../userlayout/header.ejs') %>
+    <%- include('../userlayout/navbar.ejs') %>
+
+
+
+
+        <!-- Ec breadcrumb start -->
+        <div class="sticky-header-next-sec  ec-breadcrumb section-space-mb">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row ec_breadcrumb_inner">
+                            <div class="col-md-6 col-sm-12">
+                                <h2 class="ec-breadcrumb-title">User Profile</h2>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <!-- ec-breadcrumb-list start -->
+                                <ul class="ec-breadcrumb-list">
+                                    <li class="ec-breadcrumb-item"><a href="index.html">Home</a></li>
+                                    <li class="ec-breadcrumb-item active">My Order</li>
+                                </ul>
+                                <!-- ec-breadcrumb-list end -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Ec breadcrumb end -->
+
+        <!-- User profile section -->
+        <section class="ec-page-content ec-vendor-uploads ec-user-account pb-5">
+            <div class="container">
+                <div class="row">
+                    <!-- Sidebar Area Start -->
+                    <div class="ec-shop-leftside ec-vendor-sidebar col-lg-3 col-md-12">
+                        <div class="ec-sidebar-wrap">
+                            <!-- Sidebar Category Block -->
+                            <div class="ec-sidebar-block">
+                                <div class="ec-vendor-block">
+                                    <div class="ec-vendor-block-bg"></div>
+                                    <div class="ec-vendor-block-detail">
+                                        <img class="v-img" src="assets/images/user/1.jpg" alt="vendor image">
+                                        <h5>
+                                            <%= user.name %>
+                                        </h5>
+                                    </div>
+                                    <div class="ec-vendor-block-items">
+                                        <ul>
+                                            <li><a href="/user-profile">User Profile</a></li>
+                                            <li><a href="/my-orders">My Orders</a></li>
+                                            <li><a href="/cart-page">My cart</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ec-shop-rightside col-lg-9 col-md-12">
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+
+                                    <th scope="col">Product Name</th>
+                                    <th scope="col">Transaction Id</th>
+                                    <th scope="col">Total Price</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (orderProducts.length> 0) {
+                                    orderProducts.forEach((products, index) => {
+                                    products.forEach((product, productIndex) => {
+                                    %>
+                                    <tr>
+
+                                        <td><img width="50px" height="50px"
+                                                src="/adminAssets/adminImages/<%= product.productid.image[0] %>" alt="">
+                                            <%= product.productid.productname %>
+                                        </td>
+                                        <td class="text-center">
+                                            <%= product.count %>
+                                        </td>
+                                        <td class="text-center">
+                                            <%= product.totalPrice %>
+                                        </td>
+                                        <td class="text-success">pending</td>
+                                        <td><a class="text-danger">cancel</a></td>
+                                    </tr>
+                                    <% }); }); } %>
+                            </tbody>
+
+                        </table>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+
+
+        </section>
+        <!-- End User profile section -->
+
+
+
+
+
+        <%- include('../userlayout/footer.ejs') %>

@@ -1,0 +1,237 @@
+<%- include('../userlayout/header.ejs') %>
+  <%- include('../userlayout/navbar.ejs') %>
+    <style>
+      .ec-sidebar-fixed {
+        position: sticky;
+        top: 20px;
+        /* Adjust the top position according to your needs */
+      }
+    </style>
+    <!-- Ec breadcrumb start -->
+    <div class="sticky-header-next-sec ec-breadcrumb section-space-mb">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="row ec_breadcrumb_inner">
+              <div class="col-md-6 col-sm-12">
+                <h2 class="ec-breadcrumb-title">Checkout</h2>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <!-- ec-breadcrumb-list start -->
+                <ul class="ec-breadcrumb-list">
+                  <li class="ec-breadcrumb-item"><a href="index.html">Home</a></li>
+                  <li class="ec-breadcrumb-item active">Checkout</li>
+                </ul>
+                <!-- ec-breadcrumb-list end -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Ec breadcrumb end -->
+    <div class="container">
+      <div class="row">
+        <div class="col-8 d-flex justify-content-end pb-2">
+          <a href="/add-address"><button type="button" class="btn-success">ADD ADDRESS</button></a>
+        </div>
+        <div class="col-4"></div>
+      </div>
+    </div>
+
+    <!-- Ec checkout page -->
+    <section class="ec-page-content">
+      <div class="container">
+        <form action="" id="checkout-form">
+          <div class="row">
+            <% if (address !=0) { address.forEach((add)=> { %>
+              <div class="col-lg-8 col-md-8 pt-3">
+                <div class="card" style="width: 27rem;">
+                  <div class="card-body">
+                    <div class="d-flex">
+                      <input style="margin-bottom: 190px; margin-right: 15px" type="radio"
+                        value="<%=add.username%>,<%=add.housename%>,<%=add.city%>,<%=add.state%>,<%=add.pincode%>,<%= add.landmark %>"
+                        name="selectAddress" required>
+                      <div>
+                        <h6 class="card-subtitle mb-2 text-muted pb-2">Name : <%=add.username%>
+                        </h6>
+                        <h6 class="card-subtitle mb-2 text-muted pb-2">Mobile :<%=add.mobile%>
+                        </h6>
+                        <h6 class="card-subtitle text-muted text-dark ">Adress : </h6>
+                        <p>
+                          <%= add.housename %>, <%= add.city %> ,<%= add.state %> ,<%= add.pincode %>,<br>
+                                  <%= add.landmark %>
+                        </p>
+                        <a href="/edit-address/?id=<%= add._id %>"><button type="button"
+                            class="btn-outline-success">Edit</button></a>
+                        <button onclick="deleteAddress('<%= add._id %>','<%= add.userId %>')" type="button"
+                          class="btn-outline-danger">Delete</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <% }) } else { %>
+                <div class="row">
+                  <p class="pl-5" style="color: red;">
+                    <%=message%>
+                  </p>
+                </div>
+                <% } %>
+
+                  <!-- Sidebar Area Start -->
+                  <div class="ec-checkout-rightside col-lg-4 col-md-12 ec-sidebar-fixed" style="margin-top:-400px;">
+                    <div class="ec-sidebar-wrap">
+                      <!-- Sidebar Summary Block -->
+                      <div class="ec-sidebar-block">
+                        <div class="ec-sb-title">
+                          <h3 class="ec-sidebar-title">Summary</h3>
+                        </div>
+                        <div class="ec-sb-block-content">
+                          <div class="ec-checkout-summary">
+                            <div>
+                              <span class="text-left">Sub-Total</span>
+                              <span class="text-right">$<%= Total %>.00</span>
+                            </div>
+                            <div>
+                              <span class="text-left">Delivery Charges</span>
+                              <span class="text-right">$80.00</span>
+                            </div>
+                            <div>
+                              <span class="text-left">Coupon Discount</span>
+                              <span class="text-right"><a class="ec-checkout-coupon">Apply Coupon</a></span>
+                            </div>
+                            <!-- <div class="ec-checkout-coupon-content">
+                  <form class="ec-checkout-coupon-form" name="ec-checkout-coupon-form" method="post" action="#">
+                    <input class="ec-coupon" type="text" required="" placeholder="Enter Your Coupon Code"
+                      name="ec-coupon" value="">
+                    <button class="ec-coupon-btn button btn-primary" type="submit" name="subscribe" value="">Apply</button>
+                  </form>
+                </div> -->
+                            <div class="ec-checkout-summary-total">
+                              <span class="text-left">Total Amount</span>
+                              $<span class="text-right" id="total">
+                                <%= totalAmount %>.00
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Sidebar Summary Block -->
+                    </div>
+                    <div class="ec-sidebar-wrap ec-checkout-del-wrap">
+                      <!-- Sidebar Summary Block -->
+
+                      <!-- Sidebar Summary Block -->
+                    </div>
+                    <div class="ec-sidebar-wrap ec-checkout-pay-wrap">
+                      <!-- Sidebar Payment Block -->
+                      <div class="ec-sidebar-block">
+                        <div class="ec-sb-title">
+                          <h3 class="ec-sidebar-title">Payment Method</h3>
+                        </div>
+                        <div class="ec-sb-block-content">
+                          <div class="ec-checkout-pay">
+                            <div class="ec-pay-desc">Please select the preferred payment method to use on this order.
+                            </div>
+                            <span class="ec-pay-option">
+                              <span>
+                                <input type="radio" id="pay1" name="radio-group" checked>
+                                <label for="pay1">Cash On Delivery</label>
+                              </span>
+                            </span>
+                            <div>
+                              <button type="submit" class="btn-primary">PLACE ORDER</button>
+                            </div>
+        </form>
+      </div>
+      </div>
+      </div>
+      <!-- Sidebar Payment Block -->
+      </div>
+      </div>
+      </div>
+      </div>
+    </section>
+
+    <script>
+
+      $("#checkout-form").submit((e) => {
+        let address = $("input[name=selectAddress]:checked").val();
+        let total = document.getElementById("total").innerHTML;
+        e.preventDefault();
+        $.ajax({
+          url: "/checkout-page",
+          method: "post",
+          data: {
+            Total: total,
+            address: address,
+          },
+          success: (response) => {
+            if (response.codsuccess == true) {
+              swal.fire({
+                positon: 'center',
+                icon: "success",
+                title: 'Order Placed Successfully',
+                showConfirmButton: false,
+                showCancelButton: true,
+                cancelButtonText: "Go to Shop",
+              }).then((result) => {
+                if (result.dismiss === swal.DismissReason.cancel) {
+                  // Redirect to the shop page
+                  window.location.href = "/shop-page";
+                }
+              });
+            }
+          }
+        });
+      });
+
+
+
+      
+      function deleteAddress(addId, user) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: 'You want to delete address',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajax({
+              url: '/delete-address',
+              data: {
+                address: addId,
+                userId: user
+              },
+              method: 'post',
+              success: (response) => {
+                location.reload();
+                Swal.fire({
+                  title: 'Deleted!',
+                  text: 'Your item has been deleted.',
+                  icon: 'success',
+                  timer: 3000,
+                  showConfirmButton: false
+                });
+              },
+              error: (error) => {
+                console.log(error);
+                Swal.fire({
+                  title: 'Error!',
+                  text: 'An error occurred while deleting the item.',
+                  icon: 'error',
+                  showConfirmButton: false
+                });
+              }
+            });
+          }
+        });
+      }
+
+    </script>
+
+    <%- include('../userlayout/footer.ejs') %>

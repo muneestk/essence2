@@ -1,0 +1,112 @@
+<%- include('../adminlayout/header.ejs') %>
+<%- include('../adminlayout/sidebar.ejs') %>
+<%- include('../adminlayout/navbar.ejs') %>
+
+<div class="card-body">
+  <h3 class="card-title">Edit Product</h3>
+
+  <form action="" method="POST" class="form-group m-2 mt-5 pt-5" enctype="multipart/form-data">
+    <label>PRODUCT</label>
+    <input type="name" class="form-control form-control-lg" name="productname" value="<%= product.productname %>"
+      required>
+    <br><br>
+    <label>STOCK</label>
+    <input type="text" class="form-control form-control-lg" name="quantity" value="<%= product.quantity %>"
+      required>
+    <br><br>
+    <label>PRICE</label>
+    <input type="text" class="form-control form-control-lg" name="price" value="<%= product.price %>" required>
+    <br><br>
+    <div class="form-group">
+      <label for="exampleInputEmail3">Brand</label>
+      <select name="brand" class="form-control" id="exampleInputEmail3" required>
+        <option>ZARA</option>
+        <option>LP</option>
+        <option>US POLO</option>
+        <option>NELLY</option>
+        <option>ROADSTER</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="exampleInputCity1">Category</label>
+      <select name="category" class="form-control" id="Catagory" required>
+        <% for (let i = 0; i < category.length; i++) { %>
+          <option value="<%= category[i].categoryname %>">
+            <%= category[i].categoryname %>
+          </option>
+        <% } %>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="exampleInputEmail3">Size</label>
+      <select name="size" class="form-control" id="exampleInputEmail3" required>
+        <option>M</option>
+        <option>S</option>
+        <option>L</option>
+        <option>XL</option>
+        <option>XXL</option>
+      </select>
+    </div>
+
+    <label>DESCRIPTION</label>
+    <input type="text" class="form-control form-control-lg" name="description"
+      value="<%= product.description %>" required>
+    <br><br>
+
+    <div class="form-group">
+      <label>File upload</label>
+      <div class="input-group col-xs-12">
+        <% if (product.image && product.image.length > 0) { %>
+          <% product.image.forEach((x, index) => { %>
+            <img src="/adminAssets/adminImages/<%= x %>" alt="" width="60px" height="50">
+          <% }); %>
+        <% } %>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      Edit Image
+    </button>
+
+    <input type="hidden" name="id" value="<%= product._id %>">
+    <input class="btn btn-block btn-facebook auth-form-btn" type="submit" value="Update Product">
+  </form>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Image Editing</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- form starts -->
+      <form action="/admin/edit-product/updateimage/<%- product._id %>" method="post" enctype="multipart/form-data">
+        <div class="modal-body">
+          <input multiple type="file" class="form-control" id="basic-default-name" name="image" />
+          <br>
+
+          <% if (product.image && product.image.length > 0) { %>
+            <% product.image.forEach((x, index) => { %>
+              <img class="mb-3" src="/adminAssets/adminImages/<%= x %>" alt="product image" width="60px" height="50">
+              <a href="/admin/delete-image/<%= x %>/<%= product._id %>">
+                <button type="button" class="btn btn-danger mb-4" data-bs-dismiss="modal">Delete</button>
+              </a>
+              <br>
+            <% }); %>
+          <% } %>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('../adminlayout/footer.ejs') %>
