@@ -3,10 +3,7 @@ const bcrypt = require("bcrypt");
 const nodemailer = require('nodemailer')
 const Product = require('../models/product-model')
 const category = require('../models/catogory-model')
-const Address = require('../models/address-model')
-const Order = require('../models/order-modal')
-// const dotenv = require('dotenv')
-// dotenv.config()
+
 
 let otp;
 
@@ -309,33 +306,47 @@ const loadHome = async (req, res) => {
 
 // filtering category
 
-
 const filterCategory = async (req, res) => {
   try {
-      const session = req.session.user_id;
-      const catName = req.body.category;
-      const categoryData = await category.find({ is_delete: false });
-      const catData = await Product.find({ category: catName ,is_delete: false});
-      if (catData) {
-          res.render('shop-page', { product: catData, session, category: categoryData }, (err, html) => {
-              if (err) {
-                  console.log(err);
-                  res.status(500).json({ success: false });
-              } else {
-                  res.json({ success: true, html: html });
-              }
-          });
-      } else {
-          console.log('error filter');
-          res.status(500).json({ success: false });
-      }
+    const session = req.session.user_id;
+    const catName = req.params.id;
+    const categoryData = await category.find({ is_delete: false });
+    const catData = await Product.find({ category: catName, is_delete: false });
+
+    if (catData.length > 0) {
+      res.render("shop-page", {
+        product: catData,
+        session,
+        category: categoryData,
+      });
+    } else {
+      res.render("shop-page", { product: [], session, category: categoryData });
+    }
   } catch (error) {
-      console.log(error.message);
-      res.status(500).json({ success: false });
+    console.log(error.message);
   }
 };
 
 
+const searchProducts = async (req, res) => {
+  try {
+
+    const search = req.body.search;
+    const session = req.session.user_id;
+    
+    const categories = await category.find({ is_delete: false });
+
+    const productData = await Product.find({ productname: { $regex: search, $options: 'i' } });
+     if (productData.length > 0) {
+      res.render('shop-page', { session, category: categories, product: productData });
+    } else {
+      res.render('shop-page', { session, category: categories, product: productData });
+    }
+  } catch (error) {
+    console.log(error.message);
+   
+  }
+};
 
 
 
@@ -365,7 +376,9 @@ module.exports = {
   loaduserprofile,
   editProfile,
   updateUser,
-  filterCategory
+  filterCategory,
+  searchProducts,
+
   
 
 };

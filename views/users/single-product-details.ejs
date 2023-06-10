@@ -83,7 +83,7 @@
                                                     <span class="new-price">$<%= product.price %>.00</span>
                                                 </div>
                                                 <div class="ec-single-stoke">
-                                                    <% if(product.quantity.length !=0){ %>
+                                                    <% if(product.quantity !== 0){ %>
                                                         <span class="ec-single-ps-title text-success">IN STOCK</span>
                                                         <% }else{ %>
                                                             <span class="ec-single-ps-title text-danger">OUT OF
@@ -97,9 +97,13 @@
 
 
                                                 <div class="ec-single-cart ">
-
-                                                    <button class="btn btn-primary"
+                                                    <% if(product.quantity !== 0){ %>
+                                                        <button class="btn btn-primary"
                                                         onclick="addtocart('<%=product._id%>')">Add To Cart</button>
+                                                        <% }else{ %>
+                                                            <a class="btn btn-danger">Out Of Stock</a>
+                                                            <% } %>
+                                                   
                                                 </div>
                                                 <div class="ec-single-wishlist">
                                                     <a class="ec-btn-group wishlist" title="Wishlist"><img
@@ -143,8 +147,14 @@
                                 showConfirmButton: false,
                                 timer: 1500,
                             })
-                        }
+                        }else {
+                        swal.fire({ 
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: response.message
+                        });
                     }
+                 } 
                 })
             }
 

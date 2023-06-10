@@ -24,12 +24,14 @@ user_route.get('/shop-page',auth.blocked,auth.isLogin,userController.loadShop)
 user_route.get('/showProduct',userController.loadSingleProduct)
 user_route.get('/user-profile',auth.isLogin,auth.blocked,userController.loaduserprofile)
 user_route.get('edit-profile/:id',auth.isLogin,userController.editProfile)
+user_route.get('/filter-category/:id',userController.filterCategory)
+
 
 user_route.post('/update-user',auth.isLogin,userController.updateUser)
 user_route.post('/login', userController.verifyLogin);
 user_route.post('/register', userController.insertUser);
 user_route.post('/verification', userController.verifyEmail);
-user_route.post('/filter-category',userController.filterCategory)
+user_route.post('/search-products', userController.searchProducts);
 
 //cart controller
 
@@ -52,6 +54,7 @@ user_route.post('/delete-address',addressController.deleteAddress)
 
 user_route.get('/my-orders',auth.isLogin,orderController.loadMyOrder)
 user_route.post('/checkout-page',orderController.placeOrder)
+
 
 module.exports = user_route;
 

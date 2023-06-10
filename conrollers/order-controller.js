@@ -59,10 +59,6 @@ const loadMyOrder = async (req, res) => {
   };
 
 
-
-
-
-
     module.exports = {
         placeOrder,
         loadMyOrder

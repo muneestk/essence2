@@ -1,7 +1,8 @@
 const Cart = require("../models/cart-model");
 const User = require("../models/user-models");
 const Product = require("../models/product-model");
-const Address = require("../models/address-model")
+const Address = require("../models/address-model");
+const { json } = require("express");
 
 // // Load cart page
 
@@ -63,60 +64,68 @@ const loadCart = async (req, res) => {
 // Add a product to the cart
 
 
+
+
 const addToCart = async (req, res) => {
   try {
-    const userId = req.session.user_id
+    const userId = req.session.user_id;
     const userData = await User.findOne({ _id: userId });
     const productId = req.body.id;
-    const productData = await Product.findOne({_id: productId});
+    const productData = await Product.findOne({ _id: productId });
 
-    const cartData = await Cart.findOne({ userId: userId });
+    const productQuantity = productData.quantity;
 
-    if (cartData) {
-     
-      const productExists = cartData.products.some(
-        (products) => products.productid == productId
-      );
+    const cartData = await Cart.findOneAndUpdate(
+      { userId: userId },
+      {
+        $setOnInsert: {
+          userId: userId,
+          username: userData.name,
+          products: [],
+        },
+      },
+      { upsert: true, new: true }
+    );
 
-      if (productExists) {
-        await Cart.findOneAndUpdate(
-          { userId: userId, "products.productid": productId },
-          { $inc: { "products.$.count": 1,"products.$.totalAmount":productData.price } }
-        );
-      } else {
-        await Cart.findOneAndUpdate(
-          { userId: userId },
-          { 
-            $push: { 
-              products: { 
-                productid: productId,
-                productPrice: productData.price,
-                totalPrice:productData.price 
-              } 
-            } 
-          }
-        );
-      }
-      
-    } else {
-      const newCart = new Cart({
-        userId: userId,
-        username: userData.name,
-        products: [{ 
-          productid: productId,
-          productPrice: productData.price,
-          totalPrice:productData.price
-        }],
+    const updatedProduct = cartData.products.find((product) => product.productid === productId);
+    const updatedQuantity = updatedProduct ? updatedProduct.count : 0;
+
+    if (updatedQuantity + 1 > productQuantity) {
+      return res.json({
+        success: false,
+        message: "Quantity limit reached!",
       });
-
-      await newCart.save();
     }
+
+    const cartProduct = cartData.products.find((product) => product.productid === productId);
+
+    if (cartProduct) {
+      await Cart.updateOne(
+        { userId: userId, "products.productid": productId },
+        {
+          $inc: {
+            "products.$.count": 1,
+            "products.$.totalPrice": productData.price,
+          },
+        }
+      );
+    } else {
+      cartData.products.push({
+        productid: productId,
+        productPrice: productData.price,
+        totalPrice: productData.price,
+      });
+      await cartData.save();
+    }
+
     res.json({ success: true });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
+
+
 
 //change product quantity in cart
 
@@ -130,25 +139,41 @@ const changeProductCount = async (req, res) => {
     const product = cartData.products.find((product) => product.productid === proId);
     const productData = await Product.findOne({ _id: proId });
     
+    const productQuantity = productData.quantity
+    
+
+    const updatedCartData = await Cart.findOne({ userId: userData });
+    const updatedProduct = updatedCartData.products.find((product) => product.productid === proId);
+    const updatedQuantity = updatedProduct.count;
+    
+    
+    if (count > 0) {
+      // Quantity is being increased
+      if (updatedQuantity + count > productQuantity) {
+        res.json({ success: false, message: 'Quantity limit reached!' });
+        return;
+      }
+    } else if (count < 0) {
+      // Quantity is being decreased
+      if (updatedQuantity <= 1 || Math.abs(count) > updatedQuantity) {
+        await Cart.updateOne(
+          { userId: userData },
+          { $pull: { products: { productid: proId } } }
+        );
+        res.json({ success: true });
+        return;
+      }
+    }
+    
     const cartdata = await Cart.updateOne(
       { userId: userData, "products.productid": proId },
       { $inc: { "products.$.count": count } }
     );
     
-    const updatedCartData = await Cart.findOne({ userId: userData });
-    const updatedProduct = updatedCartData.products.find((product) => product.productid === proId);
-    const updatedQuantity = updatedProduct.count;
-    
-    if (updatedQuantity < 1) {
-      await Cart.updateOne(
-        { userId: userData },
-        {
-          $pull: { products: { productid: proId } }
-        }
-      );
-    }
-
-    const price = updatedQuantity * productData.price;
+    const updateCartData = await Cart.findOne({ userId: userData });
+    const updateProduct = updateCartData.products.find((product) => product.productid === proId);
+    const updateQuantity = updateProduct.count;
+    const price = updateQuantity * productData.price;
     
     await Cart.updateOne(
       { userId: userData, "products.productid": proId },
@@ -156,6 +181,7 @@ const changeProductCount = async (req, res) => {
     );
     
     res.json({ success: true });
+    
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ success: false, error: error.message });

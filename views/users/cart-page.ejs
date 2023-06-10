@@ -156,28 +156,35 @@
                 $.ajax({
                     url: '/change-quantity',
                     data: {
-                        user: userId,
-                        product: proId,
-                        count: count
+                    user: userId,
+                    product: proId,
+                    count: count
                     },
                     method: 'post',
                     success: (response) => {
-                        if (response.success) {
-
-                            $('#reloadDiv').load('/cart-page #reloadDiv')
-                        } else if (response.check) {
-                            swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Out of stock'
-                            });
-                        }
+                    if (response.success) {
+                        $('#reloadDiv').load('/cart-page #reloadDiv');
+                    } else if (response.check) {
+                        swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Out of stock'
+                        });
+                    } else {
+                        swal.fire({ 
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: response.message
+                        });
+                    }
                     },
                     error: (error) => {
-                        console.log(error);
+                    console.log(error);
                     }
                 });
-            }
+                }
+
+            
 
 
 
