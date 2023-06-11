@@ -1,13 +1,12 @@
 const express = require('express');
 const user_route = express();
 
-
-
 const auth = require('../middleware/Auth');
 const userController = require('../conrollers/user-controller');
 const cartController = require('../conrollers/cart-controller')
 const addressController = require('../conrollers/address-controller')
 const orderController = require('../conrollers/order-controller')
+const wishlistController = require('../conrollers/wishlist-controller')
 
 user_route.set('view engine', 'ejs');
 user_route.set('views', './views/users');
@@ -50,6 +49,12 @@ user_route.post('/add-address',auth.isLogin,addressController.insertAddress)
 user_route.post('/update-address',auth.isLogin,addressController.updateAddress)
 user_route.post('/delete-address',addressController.deleteAddress)
 
+//wishlist controller
+
+user_route.get('/delete-wishlist',wishlistController.deleteWishlist)
+user_route.get('/delete-wishlist-single',wishlistController.deleteSingleWishlist)
+user_route.get('/wishlist-page',auth.isLogin,wishlistController.wishlistLoad)
+user_route.post('/addtoWishlist',wishlistController.addToWishlist)
 //order controller
 
 user_route.get('/my-orders',auth.isLogin,orderController.loadMyOrder)

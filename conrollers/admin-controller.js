@@ -52,7 +52,6 @@ const verifyLogin = async (req, res) => {
 const loadDashboard = async (req, res) => {
   try {
     const adminData = await User.findById({ _id: req.session.Auser_id });
-  
     res.render("dash-board", { admin: adminData });
   } catch (error) {
     console.log(error.message);
@@ -78,7 +77,7 @@ const loadUsers= async (req, res) => {
 const block = async (req,res)=> {
   try {
     const userData = await User.findByIdAndUpdate(req.query.id,{$set:{is_block:true}})
-    req.session.user = null
+    req.session.user_id = null
     res.redirect("/admin/users-list")
   } catch (error) {
     console.log(error.message);

@@ -1,0 +1,116 @@
+<%- include('../userlayout/header.ejs') %>
+<%- include('../userlayout/navbar.ejs') %>
+
+<!-- Ec breadcrumb start -->
+<div class="sticky-header-next-sec  ec-breadcrumb section-space-mb">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="row ec_breadcrumb_inner">
+                    <div class="col-md-6 col-sm-12">
+                        <h2 class="ec-breadcrumb-title">Wishlist</h2>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <!-- ec-breadcrumb-list start -->
+                        <ul class="ec-breadcrumb-list">
+                            <li class="ec-breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="ec-breadcrumb-item active">Wishlist</li>
+                        </ul>
+                        <!-- ec-breadcrumb-list end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Ec breadcrumb end -->
+
+<!-- Ec Wishlist page -->
+<section class="ec-page-content section-space-p">
+    <div class="container">
+        <div class="row">
+            <!-- Compare Content Start -->
+            <div class="ec-wish-rightside col-lg-12 col-md-12">
+                <!-- Compare content Start -->
+                <div class="ec-compare-content">
+                    <div class="ec-compare-inner">
+                        <div class="row margin-minus-b-30">
+
+                            <% if (wishlist.length > 0) {
+                                wishlist.forEach((wish) => { %>
+
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-6 pro-gl-content">
+                                <div class="ec-product-inner">
+                                    <div class="ec-pro-image-outer">
+                                        <div class="ec-pro-image">
+                                            <a href="product-left-sidebar.html" class="image">
+                                                <img class="main-image" width="300px" height="300px" src="/adminAssets/adminImages/<%= wish.productId.image[0] %>" alt="Product" />
+                                            </a>
+                                            <a href="/delete-wishlist?id=<%= wish.productId._id %>"> <span class="ec-com-remove">×</span></a>
+                                            <span class="percentage">20%</span>
+                                        </div>
+                                    </div>
+                                    <div class="ec-pro-content text-center">
+                                        <h5 class="ec-pro-title"><a href="product-left-sidebar.html"><%= wish.productId.productname %></a></h5>
+                                        <div class="ec-pro-list-desc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dutmmy text ever since the 1500s, when an unknown printer took a galley.</div>
+                                        <div class="ec-price d-flex justify-content-center">
+                                            <h6 class="new-price">$<%= wish.productId.price %>.00</h6>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-success" onclick="addtocart('<%= wish.productId._id %>')">Add to Cart</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <% }); %>
+
+                            <% } else { %>
+
+                            <div class="d-flex justify-content-center">
+                                <h1>No items in wishlist</h1>
+                            </div>
+
+                            <% } %>
+
+                        </div>
+                    </div>
+                </div>
+                <!--compare content End -->
+            </div>
+            <!-- Compare Content end -->
+        </div>
+    </div>
+</section>
+
+<script>
+    
+    function addtocart(productid) {
+                $.ajax({
+                    url: "/addtocart",
+                    method: "post",
+                    data: {
+                        id: productid
+                    },
+                    success: (response) => {
+                        if (response.success) {
+                            swal.fire({
+                                positon: 'center',
+                                icon: "success",
+                                title: 'product added to cart',
+                                showConfirmButton: false,
+                                timer: 1500,
+                            })
+                        }else {
+                        swal.fire({ 
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: response.message
+                        });
+                    }
+                 } 
+                })
+            }
+</script>
+
+<%- include('../userlayout/footer.ejs') %>

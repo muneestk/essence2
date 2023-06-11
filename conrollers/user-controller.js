@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const nodemailer = require('nodemailer')
 const Product = require('../models/product-model')
 const category = require('../models/catogory-model')
-
+const wishlist = require('../models/wishlist-model')
 
 let otp;
 
@@ -76,16 +76,25 @@ const loadShop = async (req, res) => {
 
 //for loading single product details
 
-const loadSingleProduct = async(req,res)=>{
+
+const loadSingleProduct = async (req, res) => {
   try {
     const session = req.session.user_id;
     const id = req.query.id;
-    const productdata = await Product.findById({_id:id});
-    res.render('single-product-details',{product:productdata,session})
+    const productdata = await Product.findById({ _id: id });
+    const wishlistData = await wishlist.find({ userId: session, "products.productId": id });
+
+    let checkWishlist = -1; 
+
+    if (wishlistData.length > 0) {
+      checkWishlist = wishlistData[0].products.findIndex((wish) => wish.productId == id);
+    }
+    res.render('single-product-details', { product: productdata, session, wishlist: checkWishlist });
   } catch (error) {
     console.log(error.message);
-  }  
+  }
 }
+
 
 //for loading userpage
 
@@ -117,10 +126,6 @@ const editProfile = async(req,res)=>{
     console.log(error.message);
   }
 }
-
-
-
-
 
 //update user profile
 
@@ -224,8 +229,6 @@ const verifyLogin = async (req, res) => {
   }
 };
 
-
-
 // sending mail to user
 
 const sendVerifyMail = async (name, email, otp) => {
@@ -252,9 +255,6 @@ const sendVerifyMail = async (name, email, otp) => {
     console.log(error);
   }
 };
-
-
-
 
 //  Verifying the users otp and redirecting to login page
 
@@ -327,6 +327,7 @@ const filterCategory = async (req, res) => {
   }
 };
 
+//search any products
 
 const searchProducts = async (req, res) => {
   try {
@@ -378,8 +379,6 @@ module.exports = {
   updateUser,
   filterCategory,
   searchProducts,
-
-  
 
 };
 

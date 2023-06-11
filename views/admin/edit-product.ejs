@@ -20,6 +20,7 @@
     <div class="form-group">
       <label for="exampleInputEmail3">Brand</label>
       <select name="brand" class="form-control" id="exampleInputEmail3" required>
+        <option><%= product.brand %></option>
         <option>ZARA</option>
         <option>LP</option>
         <option>US POLO</option>
@@ -31,6 +32,7 @@
     <div class="form-group">
       <label for="exampleInputCity1">Category</label>
       <select name="category" class="form-control" id="Catagory" required>
+        <option><%= product.category %></option>
         <% for (let i = 0; i < category.length; i++) { %>
           <option value="<%= product.category %>">
             <%= category[i].categoryname %>
@@ -41,7 +43,8 @@
 
     <div class="form-group">
       <label for="exampleInputEmail3">Size</label>
-      <select name="size" class="form-control" id="exampleInputEmail3" value="<%= product.size %>"required>
+      <select name="size" class="form-control" id="exampleInputEmail3" value=""required>
+        <option><%= product.size %></option>
         <option>M</option>
         <option>S</option>
         <option>L</option>

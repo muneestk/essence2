@@ -16,10 +16,9 @@ const categoryList = async (req,res)=>{
     }
 }
 
-// //  updating and saving the catagory 
+ //  updating and saving the catagory 
 const  saveCatogary= async (req,res)=>{
     try {
-       
         const name = uc.upperCase(req.body.categorynames);
        const catDATA = await category.findOneAndUpdate({_id:req.query.id},{$set:{categoryname:name}});
        if(catDATA){
@@ -35,9 +34,7 @@ const  saveCatogary= async (req,res)=>{
 //  Adding the catagory
 const insertCategory = async (req,res)=>{
     try
-   
      {
-      
         if(req.session.Auser_id){
           
             const catName = uc.upperCase(req.body.categoryname);

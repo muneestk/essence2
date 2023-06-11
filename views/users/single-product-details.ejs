@@ -105,10 +105,18 @@
                                                             <% } %>
                                                    
                                                 </div>
+                                               
                                                 <div class="ec-single-wishlist">
-                                                    <a class="ec-btn-group wishlist" title="Wishlist"><img
+                                                    <% if(wishlist === -1){ %>
+                                                    <a class="ec-btn-group wishlist" onclick="addWishlist('<%=product._id%>')" title="Wishlist"><img
                                                             src="assets/images/icons/wishlist.svg"
                                                             class="svg_img pro_svg" alt="" /></a>
+                                                            <% }else{ %>
+                                                                <a class="ec-btn-group wishlist" href="/delete-wishlist-single?id=<%= product._id %> "  title="Wishlist"><img
+                                                                    src="assets/images/icons/wishlist1.svg"
+                                                                    class="svg_img pro_svg" alt="" /></a>
+                                                                <% } %>
+                                                            
                                                 </div>
 
                                             </div>
@@ -156,6 +164,20 @@
                     }
                  } 
                 })
+            }
+
+            function addWishlist(id){
+               $.ajax({
+              
+                url:'/addtoWishlist',
+                method:'post',
+                data: {
+                        proId:id
+                    },
+                    success: (response) => {
+                        location.reload()
+                        } 
+               })
             }
 
 

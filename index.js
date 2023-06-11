@@ -19,7 +19,7 @@ const publicPath = path.join(__dirname, "public");
 app.use(express.static(publicPath));
 
 app.use(
-  session({
+  session({ 
     secret: process.env.SESSIONSECRET,
     saveUninitialized: true,
     resave: false,
