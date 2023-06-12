@@ -8,6 +8,7 @@ const wishlistLoad = async (req, res) => {
   try {
     const session = req.session.user_id;
     const wishlistData = await Wishlist.find({ userId: session }).populate('products.productId');
+    console.log(wishlistData);
     if (wishlistData.length > 0) {
       const wishlist = wishlistData[0].products;
       const products = wishlist.map(wish => wish.productId);
@@ -79,7 +80,6 @@ const addToWishlist = async (req, res) => {
         res.json({ success: true });
       }
     } else {
-        console.log(userData.name);
       const wishlist = new Wishlist({
         userId: req.session.user_id,
         userName: userData.name, 

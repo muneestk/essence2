@@ -59,6 +59,7 @@ user_route.post('/addtoWishlist',wishlistController.addToWishlist)
 
 user_route.get('/my-orders',auth.isLogin,orderController.loadMyOrder)
 user_route.post('/checkout-page',orderController.placeOrder)
+user_route.post('/verify-payment',orderController.verifyPayment)
 
 
 module.exports = user_route;

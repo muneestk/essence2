@@ -19,7 +19,7 @@
                         </div>
                         <!-- Header User End -->
                         <!-- Header Cart Start -->
-                        <a href="wishlist.html" class="ec-header-btn ec-header-wishlist">
+                        <a href="/wishlist-page" class="ec-header-btn ec-header-wishlist">
                             <div class="header-icon"><img src="/assets/images/icons/wishlist.svg"
                                     class="svg_img header_svg" alt="" /></div>
                             <span class="ec-header-count">4</span>
@@ -99,7 +99,7 @@
                             </div>
                             <!-- Header User End -->
                             <!-- Header wishlist Start -->
-                            <a href="wishlist.html" class="ec-header-btn ec-header-wishlist">
+                            <a href="/wishlist-page" class="ec-header-btn ec-header-wishlist">
                                 <div class="header-icon"><img src="/assets/images/icons/wishlist.svg"
                                         class="svg_img header_svg" alt="" /></div>
                                 <!-- <span class="ec-header-count">4</span> -->
@@ -236,9 +236,8 @@
                                                                     onclick="addtocart('<%=product[i]._id%>')"
                                                                     class=" add-to-cart"><img
                                                                         src="assets/images/icons/cart.svg"
-                                                                        class="svg_img pro_svg" alt="" /> Add To
-                                                                    Cart</button>
-                                                                <a class="ec-btn-group wishlist" title="Wishlist"><img
+                                                                        class="svg_img pro_svg" alt="" /> Add To Cart</button>
+                                                                <a class="ec-btn-group wishlist" onclick="addWishlist('<%=product[i]._id%>')" title="Wishlist"><img
                                                                         src="assets/images/icons/wishlist.svg"
                                                                         class="svg_img pro_svg" alt="" /></a>
                                                             </div>
@@ -388,6 +387,28 @@
             }
             
           
+
+            
+            function addWishlist(id){
+               $.ajax({
+              
+                url:'/addtoWishlist',
+                method:'post',
+                data: {
+                        proId:id
+                    },
+                    success: (response) => {
+                        swal.fire({
+                                positon: 'center',
+                                icon: "success",
+                                title: 'product added to wishlist',
+                                showConfirmButton: false,
+                                timer: 1500,
+                            })
+                        }
+
+               })
+            }
     
 
         </script>

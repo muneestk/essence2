@@ -311,11 +311,11 @@ const filterCategory = async (req, res) => {
     const session = req.session.user_id;
     const catName = req.params.id;
     const categoryData = await category.find({ is_delete: false });
-    const catData = await Product.find({ category: catName, is_delete: false });
+    const productData = await Product.find({ category: catName, is_delete: false });
 
     if (catData.length > 0) {
       res.render("shop-page", {
-        product: catData,
+        product: productData,
         session,
         category: categoryData,
       });

@@ -42,7 +42,7 @@ const orderSchema = new mongoose.Schema({
   status: {
     type: String
   },
-  deliveryMethod: {
+  paymentMethod: {
     type:String
   },
   is_cancelled:{

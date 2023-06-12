@@ -136,8 +136,14 @@
                             </div>
                             <span class="ec-pay-option">
                               <span>
-                                <input type="radio" id="pay1" name="radio-group" checked>
+                                <input type="radio" id="COD" name="payment" value="COD" checked>
                                 <label for="pay1">Cash On Delivery</label>
+                              </span>
+                            </span> <br>
+                            <span class="ec-pay-option">
+                              <span>
+                                <input type="radio" id="online-payment" name="payment" value="online-payment" checked>
+                                <label for="pay1">Razor Pay</label>
                               </span>
                             </span>
                             <div>
@@ -159,6 +165,7 @@
       $("#checkout-form").submit((e) => {
         let address = $("input[name=selectAddress]:checked").val();
         let total = document.getElementById("total").innerHTML;
+        let payment =  $("input[name=payment]:checked").val();
         e.preventDefault();
         $.ajax({
           url: "/checkout-page",
@@ -166,6 +173,7 @@
           data: {
             Total: total,
             address: address,
+            payment : payment 
           },
           success: (response) => {
             if (response.codsuccess == true) {
@@ -183,10 +191,91 @@
                 }
               });
             }
+            else{
+              razorPayment(response.order)
+            }
           }
         });
       });
 
+
+      
+    function razorPayment(order){
+      alert(order)
+            var options = {
+                "key": "rzp_test_vHIaDnAR7StDlQ", // Enter the Key ID generated from the Dashboard
+                "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                "currency": "INR",
+                "name": "ESSENCE", //your business name
+                "description": "Test Transaction",
+                "image": "https://example.com/your_logo",
+                "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                "handler": function(response){
+                  verifyPayment(response,order)
+                }, 
+                "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+                    "name": "Gaurav Kumar", //your customer's name
+                    "email": "gaurav.kumar@example.com",
+                    "contact": "9000090000" //Provide the customer's phone number for better conversion rates 
+                },
+                "notes": {
+                    "address": "Razorpay Corporate Office"
+                },
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+            var rzp1 = new Razorpay(options);
+                rzp1.open();
+                
+            }
+
+
+
+            
+  function verifyPayment(payment,order){
+    const amount2 = document.getElementById("total").innerHTML;
+    $.ajax({
+      url:"/verify-payment",
+      method:"post",
+      data:{
+        payment: payment,
+        amount2: amount2,
+        order: order
+      },
+      success:(response)=>{
+        if(response.success){
+          swal.fire({
+            positon: 'center',
+            icon: "success",
+            title: 'Order Placed Successfully',
+            showConfirmButton: false,
+            showCancelButton: true,
+            cancelButtonText: "Go to Shop",
+        }).then((result) => {
+            if (result.dismiss === swal.DismissReason.cancel) {
+              window.location.href = "/product";
+            }
+          });
+        }else{
+          swal.fire({
+            positon: 'center',
+            icon: "error",
+            title: 'payment failed',
+            showConfirmButton: false,
+            timer:1500,
+        })
+        }
+      }
+    })
+  }
+
+   
+
+
+
+
+    
 
 
       
