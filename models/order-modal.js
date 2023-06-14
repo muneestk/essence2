@@ -45,6 +45,9 @@ const orderSchema = new mongoose.Schema({
   paymentMethod: {
     type:String
   },
+  paymentId:{
+    type:String
+  },
   is_cancelled:{
     type:Boolean,
     default:false

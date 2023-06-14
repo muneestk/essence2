@@ -1,6 +1,7 @@
 const User = require("../models/user-models");
 const bcrypt = require("bcrypt");
 const category = require("../models/catogory-model")
+const Order = require("../conrollers/order-controller")
 
 
 //loading admin login page
@@ -72,6 +73,8 @@ const loadUsers= async (req, res) => {
   }
 };
 
+
+
 //blocking users from admin
 
 const block = async (req,res)=> {
@@ -114,5 +117,6 @@ const logout = async (req, res) => {
     logout,
     loadUsers,
     block,unblock,
+   
 
   }

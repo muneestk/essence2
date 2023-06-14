@@ -201,7 +201,6 @@
 
       
     function razorPayment(order){
-      alert(order)
             var options = {
                 "key": "rzp_test_vHIaDnAR7StDlQ", // Enter the Key ID generated from the Dashboard
                 "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -254,7 +253,7 @@
             cancelButtonText: "Go to Shop",
         }).then((result) => {
             if (result.dismiss === swal.DismissReason.cancel) {
-              window.location.href = "/product";
+              window.location.href = "/shop-page";
             }
           });
         }else{

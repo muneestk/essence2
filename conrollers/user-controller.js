@@ -313,7 +313,7 @@ const filterCategory = async (req, res) => {
     const categoryData = await category.find({ is_delete: false });
     const productData = await Product.find({ category: catName, is_delete: false });
 
-    if (catData.length > 0) {
+    if (productData.length > 0) {
       res.render("shop-page", {
         product: productData,
         session,

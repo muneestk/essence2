@@ -1,0 +1,94 @@
+<%- include('../userlayout/header.ejs') %>
+    <%- include('../userlayout/navbar.ejs') %>
+
+
+
+
+        <!-- Ec breadcrumb start -->
+        <div class="sticky-header-next-sec  ec-breadcrumb section-space-mb">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row ec_breadcrumb_inner">
+                            <div class="col-md-6 col-sm-12">
+                                <h2 class="ec-breadcrumb-title">User Profile</h2>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <!-- ec-breadcrumb-list start -->
+                                <ul class="ec-breadcrumb-list">
+                                    <li class="ec-breadcrumb-item"><a href="index.html">Home</a></li>
+                                    <li class="ec-breadcrumb-item active">My Order</li>
+                                </ul>
+                                <!-- ec-breadcrumb-list end -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Ec breadcrumb end -->
+
+        <!-- User profile section -->
+        <section class="ec-page-content ec-vendor-uploads ec-user-account pb-5">
+            <div class="d-flex justify-content-center ">
+               
+                 <div class="p-5 w-50 h-50" style="border: 1px solid #dee2e6">
+                     <h1>Order Details</h1>
+                    <span>Order Date :</span><span class="font-weight-bold" > <%= orders.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).replace(/\//g,'-') %> </span><br>
+                    <span>Total Amount : <span class="font-weight-bold"> <%= orders.totalAmount %> </span></span><br>
+                    <span>Payment Method :<span class="font-weight-bold"><%= orders.paymentMethod %> </span></span><br>
+                    <span> Order Id:</span><span class="font-weight-bold"> <%= orders._id %></span></span><br>
+                    <span>Address :</span><span class="font-weight-bold"><%= orders.deliveryAddress %></span></span><br>
+                    <span>Expected Date :</span><span class="font-weight-bold"> <%= orders._id %></span></span><br>
+                 </div>
+            </div>
+            
+            <div class="container p-1">
+                    <div class="ec-shop-rightside col-lg-12 col-md-12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Product Name</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Transaction Id</th>
+                                    <th scope="col">Total Price</th> 
+                                    <th scope="col">Status</th> 
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if(orders.products.length > 0){
+                                orders.products.forEach((order) => { %>
+                                 <tr>   
+                                <td>
+                                    <img width="50px" height="50px" src="/adminAssets/adminImages/<%= order.productid.image[0] %>" alt="">
+                                    <%= order.productid.productname %> 
+                                </td>
+                                <td><%= order.count %></td>
+                                <td><%= order.productid._id %></td>
+                                <td><%= order.productPrice %></td>
+                                <td><%= orders.status %></td>
+                                <td><a href="/cancel-order"><button class="btn btn-outline-danger">Cancel</button></a></td>
+                            </tr>
+
+                             <%   }) }%>
+                            </tbody>
+                            
+                              
+                        </table>
+
+
+
+
+                    </div>
+            </div>
+
+
+        </section>
+        <!-- End User profile section -->
+
+
+
+
+
+        <%- include('../userlayout/footer.ejs') %>
