@@ -89,12 +89,13 @@ const loadOrderManagement = async(req,res) =>{
   const loadSingleDetails = async(req,res)=>{
     try {
       const id = req.params.id
-      console.log(id);
       const adminData = await User.findById(req.session.Auser_id)
       const orderData = await Order.findOne({_id : id }).populate(
         "products.productid"
       );
-      res.render('single-order-deatils',{ admin:adminData,orders:orderData});
+      const orderDate = orderData.date
+      const expectedDate  = new Date(orderDate.getTime() + (5 * 24 * 60 * 60 * 1000));
+      res.render('single-order',{ admin:adminData,orders:orderData,expectedDate});
     } catch (error) {
       console.log(error.message);
     }
@@ -102,12 +103,11 @@ const loadOrderManagement = async(req,res) =>{
 
  //load my order
 
-
-const loadMyOrder = async (req, res) => {
+  const loadMyOrder = async (req, res) => {
     try {
       const session = req.session.user_id;
       const user = await User.findById(session);
-      const orderData = await Order.find({ userId: session }).populate("products.productid")
+      const orderData = await Order.find({ userId: session }).populate("products.productid").sort({ date: -1 });
       
       const orderProducts = orderData.map(order => order.products); 
   
@@ -118,7 +118,7 @@ const loadMyOrder = async (req, res) => {
   };
 
 
-  //single order page loadind
+  //single order page loading
 
   const loadSingleOrder = async(req,res)=>{
     try {
@@ -127,7 +127,75 @@ const loadMyOrder = async (req, res) => {
       const orderData = await Order.findOne({_id : id }).populate(
         "products.productid"
       );
-      res.render('single-order-page', { session,orders:orderData});
+      const orderDate = orderData.date
+      const expectedDate  = new Date(orderDate.getTime() + (5 * 24 * 60 * 60 * 1000));
+      res.render('single-order-page', { session,orders:orderData,expectedDate});
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  //order canceling
+
+  const orderCancel = async (req, res) => {
+    try {
+      const id = req.body.id;
+      const userData = await Order.findById(req.session.user_id)
+      const orderData = await Order.findOne({ userId: req.session.user_id, 'products._id': id})
+      const product = orderData.products.find((p) => p._id.toString() === id);
+      const cancelledAmount = product.totalPrice     
+      const updatedOrder = await Order.findOneAndUpdate(
+        {
+          userId: req.session.user_id,
+          'products._id': id
+        },
+        {
+          $set: {
+            'products.$.status': 'cancelled'
+          }
+        },
+        { new: true }
+      );
+
+  
+      if (updatedOrder) {
+        if(orderData.paymentMethod === 'online-payment'){
+           await User.findByIdAndUpdate({_id:req.session.user_id},{$inc:{wallet:cancelledAmount}})
+           res.json({ success: true });
+        }else{
+           res.json({ success: true });
+        }
+      } else {
+        res.json({ success: false });
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  //changing order status
+
+  const changeStatus = async(req,res) =>{
+    try {
+      const id = req.body.id
+      const userId = req.body.userId
+      console.log(userId);
+      const statusChange = req.body.status
+      const updatedOrder = await Order.findOneAndUpdate(
+        {
+          userId: userId,
+          'products._id': id
+        },
+        {
+          $set: {
+            'products.$.status': statusChange
+          }
+        },
+        { new: true }
+      );
+      if(updatedOrder){
+        res.json({success:true})
+      }
     } catch (error) {
       console.log(error.message);
     }
@@ -164,5 +232,7 @@ const loadMyOrder = async (req, res) => {
         verifyPayment,
         loadSingleOrder,
         loadOrderManagement,
-        loadSingleDetails
+        loadSingleDetails,
+        changeStatus,
+        orderCancel
     }

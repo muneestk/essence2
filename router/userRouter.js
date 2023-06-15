@@ -26,7 +26,7 @@ user_route.get('edit-profile/:id',auth.isLogin,userController.editProfile)
 user_route.get('/filter-category/:id',userController.filterCategory)
 
 
-user_route.post('/update-user',auth.isLogin,userController.updateUser)
+user_route.post('/update-user',userController.updateUser)
 user_route.post('/login', userController.verifyLogin);
 user_route.post('/register', userController.insertUser);
 user_route.post('/verification', userController.verifyEmail);
@@ -55,10 +55,12 @@ user_route.get('/delete-wishlist',wishlistController.deleteWishlist)
 user_route.get('/delete-wishlist-single',wishlistController.deleteSingleWishlist)
 user_route.get('/wishlist-page',auth.isLogin,wishlistController.wishlistLoad)
 user_route.post('/addtoWishlist',wishlistController.addToWishlist)
+
 //order controller
 
 user_route.get('/my-orders',auth.isLogin,orderController.loadMyOrder)
 user_route.get('/single-order-page/:id',orderController.loadSingleOrder)
+user_route.post('/cancel-order',orderController.orderCancel)
 user_route.post('/checkout-page',orderController.placeOrder)
 user_route.post('/verify-payment',orderController.verifyPayment)
 

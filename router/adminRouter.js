@@ -1,12 +1,14 @@
 const express = require("express")
 const admin_route = express();
-const multer = require('multer');
+// const multer = require('multer');
 const Auth = require("../middleware/adminauth");
 const update = require('../config/multer')
 const adminController = require("../conrollers/admin-controller");
 const categoryController = require('../conrollers/category-controll')
 const productController = require("../conrollers/product-controller")
 const orderController = require("../conrollers/order-controller")
+const errorHandler = require('../middleware/error-handling')
+const coupenController = require('../conrollers/coupen-controller')
 
 admin_route.set("view engine", "ejs");
 admin_route.set("views", "./views/admin");
@@ -46,7 +48,15 @@ admin_route.post('/edit-product/updateimage/:id', update.upload.array('image', 1
 //order controller
 
 admin_route.get('/order-management',Auth.isLogin, orderController.loadOrderManagement)
-admin_route.get('/single-order-detail/:id',orderController.loadSingleDetails)
+admin_route.get('/single-order/:id',Auth.isLogin,orderController.loadSingleDetails)
+admin_route.post('/changeStatus',orderController.changeStatus)
+
+//coupen controller
+
+admin_route.get('/coupen-list',Auth.isLogin,coupenController.loadCoupenController)
+admin_route.post('/insert-coupen',coupenController.insertCoupen)
+admin_route.post('/update-coupen/:id',coupenController.updateCoupen)
+admin_route.post('/delete-coupen',coupenController.deleteCoupen)
 
 
 
@@ -54,6 +64,7 @@ admin_route.get('/single-order-detail/:id',orderController.loadSingleDetails)
 
 
 
+admin_route.use(errorHandler)
 
 
 

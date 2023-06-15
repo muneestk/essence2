@@ -1,5 +1,4 @@
 const category = require('../models/catogory-model')
-// const product = require('../models/productmodel')
 const User = require("../models/user-models");
 
 const uc = require('upper-case')

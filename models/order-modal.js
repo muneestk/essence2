@@ -30,7 +30,12 @@ const orderSchema = new mongoose.Schema({
     totalPrice: {
       type: Number,
       required: true
+    },
+    status:{
+      type:String,
+      default:'placed'
     }
+
   }],
   totalAmount: {
     type: Number,
@@ -47,10 +52,6 @@ const orderSchema = new mongoose.Schema({
   },
   paymentId:{
     type:String
-  },
-  is_cancelled:{
-    type:Boolean,
-    default:false
   },
   orderId:{
     type:String,

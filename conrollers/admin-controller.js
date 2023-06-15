@@ -16,7 +16,7 @@ const Order = require("../conrollers/order-controller")
 
 //verify admin in login page
   
-const verifyLogin = async (req, res) => {
+const verifyLogin = async (req, res ,next) => {
   try {
     const email = req.body.email;
     const password = req.body.password;
@@ -44,17 +44,19 @@ const verifyLogin = async (req, res) => {
       });
     }
   } catch (error) {
+    next(error)
     console.log(error.message);
   }
 };
 
 //loading dashboard
 
-const loadDashboard = async (req, res) => {
+const loadDashboard = async (req, res ,next) => {
   try {
     const adminData = await User.findById({ _id: req.session.Auser_id });
     res.render("dash-board", { admin: adminData });
   } catch (error) {
+    next(error)
     console.log(error.message);
   }
 };

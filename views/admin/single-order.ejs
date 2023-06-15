@@ -1,0 +1,149 @@
+<%- include('../adminlayout/header.ejs') %>
+<%- include('../adminlayout/sidebar.ejs') %>
+<%- include('../adminlayout/navbar.ejs') %>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .order-details {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .order-details h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .order-details .font-weight-bold {
+    font-weight: bold;
+    font-size: 20px;
+    color: rgba(222, 232, 237, 0.871);
+  }
+
+  .product-list {
+    margin-top: 20px;
+  }
+
+  .product-list table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .product-list th,
+  .product-list td {
+    padding: 10px;
+    text-align: left;
+  }
+
+  .product-list th {
+    background-color: #333;
+    color: #fff;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .order-details {
+      padding: 5px;
+    }
+
+    .order-details h1 {
+      font-size: 20px;
+    }
+
+    .product-list th,
+    .product-list td {
+      padding: 5px;
+      font-size: 12px;
+    }
+  }
+</style>
+</head>
+
+<body>
+  <div class="container pt-5">
+    <div class="order-details pt-5">
+      <h1>Order Details</h1>
+      <span>Order Date: <span class="font-weight-bold"><%= orders.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).replace(/\//g,'-') %></span></span><br>
+      <span>Total Amount: <span class="font-weight-bold"><%= orders.totalAmount %></span></span><br>
+      <span>Payment Method: <span class="font-weight-bold"><%= orders.paymentMethod %></span></span><br>
+      <span>Payment Id: <span class="font-weight-bold"><%= orders.paymentId %></span></span><br>
+      <span>Order Id: <span class="font-weight-bold"><%= orders._id %></span></span><br>
+      <span>Address: <span class="font-weight-bold"><%= orders.deliveryAddress %></span></span><br>
+    </div>
+
+    <div class="product-list">
+      <h4 class="card-title pt-3">Product List</h4>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="text-white">Product Name</th>
+              <th class="text-white">Quantity</th>
+              <th class="text-white">Order Id</th>
+              <th class="text-white">Product Price</th>
+              <th class="text-white">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if(orders.products.length > 0) {
+            orders.products.forEach((order) => { %>
+             <tr>
+              <td>
+                <img width="50px" height="50px" src="/adminAssets/adminImages/<%= order.productid.image[0] %>" alt="">
+                <%= order.productid.productname %> 
+              </td>
+              <td><%= order.count %></td>
+              <td><%= order.productid._id %></td>
+              <td><%= order.productPrice %></td>
+              <td>
+                <% if(order.status === 'cancelled') { %>
+                  <p class="text-danger">cancelled</p>
+                <% } else { %>
+                  <div class="dropdown show">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <%= order.status %>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <a class="dropdown-item" onclick="changeStatus(this,'<%= order._id %>','<%=orders.userId %>')">shipped</a>
+                      <a class="dropdown-item" onclick="changeStatus(this,'<%= order._id %>','<%=orders.userId %>')">Out For Delivery</a>
+                      <a class="dropdown-item" onclick="changeStatus(this,'<%= order._id %>','<%=orders.userId %>')">Delivered</a>
+                    </div>
+                  </div>
+                <% } %>
+              </td>
+            </tr>
+            <% }) } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script>
+  function changeStatus(status, id ,userid) {
+    $.ajax({
+      url: '/admin/changeStatus',
+      method: 'post',
+      data: { 
+        status: status.innerText,
+        id: id,
+        userId:userid
+      },
+      success: (Response) => {
+        location.reload();
+      },
+    });
+  }
+</script>
+
+<%- include('../adminlayout/footer.ejs') %>
