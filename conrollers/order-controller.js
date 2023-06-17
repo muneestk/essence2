@@ -23,6 +23,7 @@ const placeOrder = async (req, res) => {
     const paymentMethod = req.body.payment;
 
     const status = paymentMethod === 'COD' ? 'placed' : 'pending';
+  
 
     const order = new Order({
       deliveryAddress: address,
@@ -34,17 +35,18 @@ const placeOrder = async (req, res) => {
       status: status,
       date: new Date(),
     });
-
     const orderData = await order.save();
+  
     if (orderData) {
-      for (let i = 0; i < products.length; i++) {
-        const pro = products[i].productid;
-        const count = products[i].count;
-        await Product.findByIdAndUpdate({ _id: pro }, { $inc: { quantity: -count } });
-      }
-
+     
       if (order.status === 'placed') {
         await Cart.deleteOne({ userId: req.session.user_id });
+        for (let i = 0; i < products.length; i++) {
+          const pro = products[i].productid;
+          const count = products[i].count;
+          await Product.findByIdAndUpdate({ _id: pro }, { $inc: { quantity: -count } });
+        }
+  
         res.json({ codsuccess: true });
       } else {
         const orderId = orderData._id;
@@ -69,15 +71,44 @@ const placeOrder = async (req, res) => {
   }
 };
 
+  //verify payment from razorpay
+
+  const verifyPayment = async (req,res)=>{
+    try{
+      const cartData = await Cart.findOne({ userId: req.session.user_id });
+      const products = cartData.products;
+      const details = req.body
+      const crypto = require('crypto');
+      const hmac = crypto.createHmac('sha256', process.env.Razorpay_Key_Secret);
+      hmac.update(details.payment.razorpay_order_id + '|' + details.payment.razorpay_payment_id);
+      const hmacValue = hmac.digest('hex');
+    
+      if(hmacValue === details.payment.razorpay_signature){
+        for (let i = 0; i < products.length; i++) {
+          const pro = products[i].productid;
+          const count = products[i].count;
+          await Product.findByIdAndUpdate({ _id: pro }, { $inc: { quantity: -count } });
+        }
+        await Order.findByIdAndUpdate({_id:details.order.receipt},{$set:{status:"placed"}});
+        await Order.findByIdAndUpdate({_id:details.order.receipt},{$set:{paymentId:details.payment.razorpay_payment_id}});
+        await Cart.deleteOne({userId:req.session.user_id});
+        res.json({success:true});
+      }else{
+        await Order.findByIdAndRemove({_id:details.order.receipt});
+        res.json({success:false});
+      }
+    }catch(error){
+        console.log(error.message)
+   }
+  }
+
 //load order management
 
 const loadOrderManagement = async(req,res) =>{
   try {
     const adminData = await User.findById(req.session.Auser_id)
     const orderData = await Order.find().populate("products.productid").sort({ date: -1 });
-
     res.render('order-management',{admin:adminData,order:orderData})
-    
   } catch (error) {
     console.log(error,message);
   }
@@ -107,6 +138,7 @@ const loadOrderManagement = async(req,res) =>{
     try {
       const session = req.session.user_id;
       const user = await User.findById(session);
+      const DeletePending = await Order.deleteMany({status:'pending'})
       const orderData = await Order.find({ userId: session }).populate("products.productid").sort({ date: -1 });
       
       const orderProducts = orderData.map(order => order.products); 
@@ -179,7 +211,6 @@ const loadOrderManagement = async(req,res) =>{
     try {
       const id = req.body.id
       const userId = req.body.userId
-      console.log(userId);
       const statusChange = req.body.status
       const updatedOrder = await Order.findOneAndUpdate(
         {
@@ -201,29 +232,7 @@ const loadOrderManagement = async(req,res) =>{
     }
   }
 
-  //verify payment from razorpay
 
-  const verifyPayment = async (req,res)=>{
-    try{
-      const details = req.body
-      const crypto = require('crypto');
-      const hmac = crypto.createHmac('sha256', process.env.Razorpay_Key_Secret);
-      hmac.update(details.payment.razorpay_order_id + '|' + details.payment.razorpay_payment_id);
-      const hmacValue = hmac.digest('hex');
-    
-      if(hmacValue === details.payment.razorpay_signature){
-        await Order.findByIdAndUpdate({_id:details.order.receipt},{$set:{status:"placed"}});
-        await Order.findByIdAndUpdate({_id:details.order.receipt},{$set:{paymentId:details.payment.razorpay_payment_id}});
-        await Cart.deleteOne({userId:req.session.user_id});
-        res.json({success:true});
-      }else{
-        await Order.findByIdAndRemove({_id:details.order.receipt});
-        res.json({success:false});
-      }
-    }catch(error){
-        console.log(error.message)
-   }
-  }
 
 
     module.exports = {

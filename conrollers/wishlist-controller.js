@@ -27,7 +27,7 @@ const deleteSingleWishlist = async (req, res) => {
     try {
       const id = req.query.id;
       const user_id = req.session.user_id;
-      const a=await Wishlist.findOneAndUpdate(
+      await Wishlist.findOneAndUpdate(
         {userId:user_id},
         { $pull: { products: { productId: id } } }
       );

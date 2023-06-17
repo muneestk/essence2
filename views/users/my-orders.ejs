@@ -73,18 +73,15 @@
                             </thead>
                             <tbody>
                                 <% if (orderData.length > 0) {
-                                  orderData.forEach((order) => {
-                                    order.products.forEach((product) => { 
-                                %>
-                                <tr>
-                                    
-                                  <td>
-                                    <img width="30px" height="30px" src="/adminAssets/adminImages/<%= product.productid.image[0] %>" alt="">
-                                    <%= product.productid.productname %>
-                                  
-                                </td>
-                            <%}) %>
-                                 
+                                  orderData.forEach((order) => {  %>
+                                    <tr>  
+                                      <td>
+                                  <%  order.products.forEach((product) => {  %>
+                               
+                                    <img width="50px" height="50px" src="/adminAssets/adminImages/<%= product.productid.image[0] %>" alt="">
+                                   
+                                   <% }) %>
+                                   </td>
                                     <td><%= order.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).replace(/\//g,'-') %></td>
                                   
                                   <td class="text-center">

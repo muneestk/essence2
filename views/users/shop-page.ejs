@@ -193,12 +193,8 @@
                                 <span class="sort-by">Sort by</span>
                                 <div class="ec-select-inner">
                                     <select name="ec-select" id="ec-select">
-                                        <option selected disabled>Position</option>
-                                        <option value="1">Relevance</option>
-                                        <option value="2">Name, A to Z</option>
-                                        <option value="3">Name, Z to A</option>
-                                        <option value="4">Price, low to high</option>
-                                        <option value="5">Price, high to low</option>
+                                        <option onclick="priceSort(1)">Price, low to high</option>
+                                        <option onclick="priceSort(-1)">Price, high to low</option>
                                     </select>
                                 </div>
                             </div>
@@ -408,6 +404,20 @@
                         }
 
                })
+            }
+
+            function priceSort(id){
+                alert(id)
+                $.ajax({
+                    url:'/price-sort',
+                    method:'post',
+                    data:{
+                        id
+                    },
+                    success:(Response)=>{
+                       location.reload()
+                    }
+                })
             }
     
 

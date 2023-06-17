@@ -24,8 +24,14 @@ user_route.get('/showProduct',userController.loadSingleProduct)
 user_route.get('/user-profile',auth.isLogin,auth.blocked,userController.loaduserprofile)
 user_route.get('edit-profile/:id',auth.isLogin,userController.editProfile)
 user_route.get('/filter-category/:id',userController.filterCategory)
+user_route.get('/forgot-password',userController.loadForgotPassword)
 
 
+
+user_route.post('//price-sort',userController.priceSort)
+user_route.post('/resubmit-password',userController.resubmitPassword)
+user_route.post('/verify-forgot',userController.verifForgotMail)
+user_route.post('/forgot-password',userController.forgotVerifyMail)
 user_route.post('/update-user',userController.updateUser)
 user_route.post('/login', userController.verifyLogin);
 user_route.post('/register', userController.insertUser);

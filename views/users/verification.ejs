@@ -9,8 +9,29 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
-
-<body class="img js-fullheight" style="background-image: url(/adminAssets/images/dashboard/img_2.jpg);">
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+		<h1>ESSENCE</h1>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/home-page">Home</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/register">Sign up</a>
+            </li>
+           
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+<body class="img js-fullheight " style="background-image: url(/adminAssets/images/dashboard/img_2.jpg);">
     <section class="ftco-section">
         <div class="container">
             <div class="row justify-content-center">
@@ -24,7 +45,7 @@
                         <h3 class="text-light d-flex justify-content-center">Log in to enter</h3>
                         <form class="login_form" action="" method="post" id="contactForm" novalidate="novalidate">
                             <div class="form-group">
-                                <input type="number" class="form-control" id="otp" name="otp"
+                                <input type="number" class="form-control text-light" id="otp" name="otp"
                                     placeholder="Enter the OTP sent to your email" required>
                             </div>
                             <div class="form-group d-flex justify-content-center">
@@ -50,6 +71,7 @@
 
 
     </section>
+    
     <!-- Bootstrap js -->
     <script src="/users/js/bootstrap.min.js"></script>
 </body>
