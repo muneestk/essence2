@@ -107,6 +107,7 @@ const placeOrder = async (req, res) => {
 const loadOrderManagement = async(req,res) =>{
   try {
     const adminData = await User.findById(req.session.Auser_id)
+    const DeletePending = await Order.deleteMany({status:'pending'})
     const orderData = await Order.find().populate("products.productid").sort({ date: -1 });
     res.render('order-management',{admin:adminData,order:orderData})
   } catch (error) {

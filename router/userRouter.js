@@ -7,6 +7,7 @@ const cartController = require('../conrollers/cart-controller')
 const addressController = require('../conrollers/address-controller')
 const orderController = require('../conrollers/order-controller')
 const wishlistController = require('../conrollers/wishlist-controller')
+const coupenController = require('../conrollers/coupen-controller')
 
 user_route.set('view engine', 'ejs');
 user_route.set('views', './views/users');
@@ -25,10 +26,10 @@ user_route.get('/user-profile',auth.isLogin,auth.blocked,userController.loaduser
 user_route.get('edit-profile/:id',auth.isLogin,userController.editProfile)
 user_route.get('/filter-category/:id',userController.filterCategory)
 user_route.get('/forgot-password',userController.loadForgotPassword)
+user_route.get('/price-sort/:id',userController.priceSort)
 
 
 
-user_route.post('//price-sort',userController.priceSort)
 user_route.post('/resubmit-password',userController.resubmitPassword)
 user_route.post('/verify-forgot',userController.verifForgotMail)
 user_route.post('/forgot-password',userController.forgotVerifyMail)
@@ -69,6 +70,10 @@ user_route.get('/single-order-page/:id',orderController.loadSingleOrder)
 user_route.post('/cancel-order',orderController.orderCancel)
 user_route.post('/checkout-page',orderController.placeOrder)
 user_route.post('/verify-payment',orderController.verifyPayment)
+
+//coupen controller
+
+user_route.post('/apply-coupon',coupenController.applyCoupen)
 
 
 module.exports = user_route;

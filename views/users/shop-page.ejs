@@ -151,7 +151,7 @@
    
     
 
-
+         <div id="">
         <!-- Ec breadcrumb start -->
         <div class="sticky-header-next-sec  ec-breadcrumb section-space-mb">
             <div class="container">
@@ -176,9 +176,9 @@
         </div>
         </div>
         <!-- Ec breadcrumb end -->
+        
 
-
- <div id="relodDiv">
+    <div id="relodDiv">
         <!-- Ec Shop page -->
         <section class="ec-page-content-bnr section-space-pb bg-light">
             <div class="container">
@@ -189,15 +189,15 @@
                             <div class="col-md-6 ec-grid-list">
 
                             </div>
-                            <div class="col-md-6 ec-sort-select">
+                            <!-- <div class="col-md-6 ec-sort-select">
                                 <span class="sort-by">Sort by</span>
                                 <div class="ec-select-inner">
                                     <select name="ec-select" id="ec-select">
-                                        <option onclick="priceSort(1)">Price, low to high</option>
-                                        <option onclick="priceSort(-1)">Price, high to low</option>
+                                        <option value="/price-sort/1">Price, low to high</option>
+                                        <option value="/price-sort/-1">Price, high to low</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <!-- Shop Top End -->
 
@@ -250,7 +250,7 @@
 
                                                         <div class="ec-pro-list-desc"></div>
                                                         <span class="ec-price">
-                                                            <span class="new-price">$ <%= product[i].price %>.00</span>
+                                                            <span class="new-price">₹ <%= product[i].price %>.00</span>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -325,6 +325,27 @@
                                     </div>
                                 </div>
                                 <!-- Sidebar Size Block -->
+                                <div class="ec-sidebar-block">
+                                    <div class="ec-sb-title">
+                                        <h3 class="ec-sidebar-title">Price Filter</h3>
+                                    </div>
+                                    <div class="ec-sb-block-content">
+                                        <ul>
+                                                    <li>
+                                                        <div class="ec-sidebar-block-item">
+                                                           <a href="/price-sort/<%= 1 %>"> Low To High </a> 
+                                                        </div>
+                                                     </li>
+                                                     <li>   
+                                                        <div class="ec-sidebar-block-item">
+                                                            <a href="/price-sort/<%= -1%>"> High To Low </a> 
+                                                        </div>
+                                                    </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Sidebar Size Block -->
                         
 
                                 <!-- Sidebar Price Block -->
@@ -353,6 +374,7 @@
             </div>
         </section>
     </div>
+</div>
         <script>
 
             function addtocart(productid) {
@@ -406,20 +428,7 @@
                })
             }
 
-            function priceSort(id){
-                alert(id)
-                $.ajax({
-                    url:'/price-sort',
-                    method:'post',
-                    data:{
-                        id
-                    },
-                    success:(Response)=>{
-                       location.reload()
-                    }
-                })
-            }
-    
+             
 
         </script>
 

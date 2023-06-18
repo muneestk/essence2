@@ -511,8 +511,22 @@ const searchProducts = async (req, res) => {
 
 const priceSort = async(req,res,next) =>{
   try {
-    req.body.id
-    console.log(id);
+    const id = parseInt(req.params.id)
+    console.log(typeof id);
+    const categoryData = await category.find({ is_delete: false });
+    const session = req.session.user_id;
+    const sortData = await Product.find({is_delete:false}).sort({price:id})
+    console.log(sortData);
+    if(sortData){
+      res.render("shop-page", {
+        product: sortData,
+        session,
+        category: categoryData,
+      });
+    }else{
+        res.render("shop-page", { product: [], session, category: categoryData });
+
+    }
   } catch (error) {
     console.log(error.message);
   }
@@ -520,7 +534,7 @@ const priceSort = async(req,res,next) =>{
 
 //for user logout
 
-const userLogout = async (req, res) => {
+const userLogout = async (req, res,next) => {
   try {
     req.session.destroy();
     res.redirect("/");

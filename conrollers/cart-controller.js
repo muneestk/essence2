@@ -2,6 +2,7 @@ const Cart = require("../models/cart-model");
 const User = require("../models/user-models");
 const Product = require("../models/product-model");
 const Address = require("../models/address-model");
+const Coupen = require('../models/coupen-model')
 const { json } = require("express");
 
 // // Load cart page
@@ -30,9 +31,8 @@ const loadCart = async (req, res) => {
         
 
           const Total = total.length > 0 ? total[0].total : 0; 
-           const totalAmount = Total+80;   
           const userId = userName._id;
-          res.render("cart-page", { products: products, Total: Total, userId ,session,totalAmount});
+          res.render("cart-page", { products: products, Total: Total, userId ,session});
         } else {
           res.render("empty-cart-page", {
             userName,
@@ -235,6 +235,8 @@ const loadChekout = async(req,res)=>{
     const session = req.session.user_id
     const userData = await User.findOne ({_id:req.session.user_id});
     const addressData = await Address.findOne({userId:req.session.user_id});
+    const coupen = await Coupen.find()
+   
     const total = await Cart.aggregate([
       { $match: { userId: req.session.user_id } },
       { $unwind: "$products" },
@@ -246,20 +248,20 @@ const loadChekout = async(req,res)=>{
       },
     ]);
     const Total = total.length > 0 ? total[0].total : 0; 
-   const totalAmount = Total+80;
+   
 
     if(req.session.user_id){
       if(addressData){
           if(addressData.addresses.length>0){
             const address = addressData.addresses
             
-            res.render('checkout-page',{session,Total,address,totalAmount})
+            res.render('checkout-page',{session,Total,address,user:userData,coupen})
           }
           else{
-            res.render('empty-checkout',{session,Total,totalAmount})
+            res.render('empty-checkout',{session,Total})
           }
         }else{
-          res.render('empty-checkout',{session,Total,totalAmount});
+          res.render('empty-checkout',{session,Total,totalAmount,coupen});
         }
       }else{
         res.redirect('/')

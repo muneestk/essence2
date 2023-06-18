@@ -29,7 +29,6 @@ const insertCoupen = async(req,res,next) =>{
         if(coupenData){
             res.redirect('/admin/coupen-list')
         }else{
-            message='something error'
             res.redirect('/admin/coupen-list')
         }    
     } catch (error) {
@@ -80,6 +79,36 @@ const deleteCoupen = async(req,res,next) =>{
 }
 
 
+//applying coupen in user side
+
+const applyCoupen = async(req,res,next)=>{
+    try {
+      const code = req.body.code;
+      const amount = Number(req.body.amount)
+      console.log(amount+"=="+code);
+      const userExist = await Coupen.findOne({code:code,user:{$in:[req.session.user_id]}})
+      if(userExist){
+        res.json({user:true})
+      }else{
+        const coupendata = await Coupen.findOne({code:code})
+        if(coupendata){
+            if(coupendata.expiryDate <= new Date()){
+                res.json({date:true})
+            }else{
+                await Coupen.findOneAndUpdate({_id:coupendata._id},{$push:{user:req.session.user_id}}) 
+                const perAmount = Math.round((amount * coupendata.discountPercentage)/100 )
+                const disTotal =Math.round(amount - perAmount)
+                console.log(disTotal+"==="+perAmount);
+                return res.json({amountOkey:true,disAmount:perAmount,disTotal})
+            }
+        }
+      }
+      res.json({invalid:true})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 
 
@@ -90,5 +119,6 @@ module.exports = {
     loadCoupenController,
     insertCoupen,
     updateCoupen,
-    deleteCoupen
+    deleteCoupen,
+    applyCoupen
 }
