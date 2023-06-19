@@ -141,6 +141,8 @@ const saveProduct = async (req, res) => {
     });
   } else {
     try {
+      console.log(req.body.percentage);
+      console.log(req.body.discountname);
       const id = req.params.id;
       const images = req.files.map(file => file.filename);
 
@@ -151,6 +153,8 @@ const saveProduct = async (req, res) => {
         category: req.body.category,
         quantity: req.body.quantity,
         description: req.body.description,
+        discountPercentage:req.body.percentage,
+        discountName:req.body.discountname,
         $addToSet: { image: { $each: images } }
       });
       const adminData = await User.findById(req.session.Auser_id);

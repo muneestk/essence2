@@ -16,6 +16,7 @@
                     <th> Brand </th>
                     <th> Category </th>
                     <th> Quantity </th>
+                    <th> discount </th>
                     <th> Price </th>
                     <th> Action </th>
                   </tr>
@@ -44,12 +45,32 @@
                           <%= product[i].quantity %>
                         </td>
                         <td>
-                          <%= product[i].price %>
+                          <%= product[i].discountPercentage %>%
                         </td>
-                        <td><a class="btn btn-danger" data-toggle="modal" data-target="#deleteModal<%= product[i]._id  %>" >Delete</a>
-                          <a class="btn btn-primary" href="/admin/edit-product/<%= product[i]._id %>">Edit</a>
+                        <% 
+                        const discount =  product[i].discountPercentage 
 
-                          <!-- Modal -->
+                        const price =  product[i].price 
+
+                        const disAmount = Math.round((price*discount)/100)
+
+                        const total = price - disAmount
+
+
+                        %>
+                        <td>
+                          <% if(disAmount <= 0) {%>
+                            <%= product[i].price %>
+                            <% }else{ %>
+                          <del class="text-danger"><%= product[i].price %></del>
+                          <%= total %>
+                          <% } %>
+                        </td>
+                        <td><a class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal<%= product[i]._id  %>" >Delete</a><br>
+                          <a class="btn btn-outline-primary my-2" href="/admin/edit-product/<%= product[i]._id %>">Edit</a><br>
+                          <a class="btn btn-outline-success" data-toggle="modal" data-target="#addModal<%= product[i]._id  %>" >Add Offer</a>
+
+                    <!-- Modal for delete -->
                   <div class="modal fade" id="deleteModal<%= product[i]._id %>">
                     <div class="modal-dialog">
                       <div class="modal-content">
@@ -71,6 +92,40 @@
                       </div>
                     </div>
                   </div>
+                  <!-- Modal for add-offer -->
+
+                  <div class="modal fade" id="addModal<%= product[i]._id %>">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Add Product Offer</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form class="forms-sample" method="post" action="/admin/add-offer" >
+                          <div class="form-group">
+                          <label for="exampleInputName1">Product Offer Name</label>
+                          <input type="text" class="form-control" id="exampleInputName1" placeholder="enter the name" name="name" required>
+                          <input type="hidden" class="form-control" id="exampleInputName1"  value="<%= product[i]._id %>"  name="proId">
+                        </div>
+                          <div class="form-group">
+                          <label for="exampleInputName1">Enter Product Offer</label>
+                          <input type="Number" class="form-control" id="exampleInputName1" placeholder="enter the percentage" name="percentage" required>
+                        </div>
+                        </div>
+                        <div class="modal-footer">
+                          <a href="/admin/products-list">
+                            <button type="button" class="btn btn-secondary" id="close-modal">No</button>
+                          </a>
+                          <button class="btn btn-secondary" type="submit">Submit</button>
+                        </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+
 
                         </td>
                       </tr>

@@ -67,6 +67,7 @@ user_route.post('/addtoWishlist',wishlistController.addToWishlist)
 
 user_route.get('/my-orders',auth.isLogin,orderController.loadMyOrder)
 user_route.get('/single-order-page/:id',orderController.loadSingleOrder)
+user_route.get('/order-success/:id',orderController.loadOrderSuccess)
 user_route.post('/cancel-order',orderController.orderCancel)
 user_route.post('/checkout-page',orderController.placeOrder)
 user_route.post('/verify-payment',orderController.verifyPayment)

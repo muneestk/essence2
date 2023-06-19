@@ -57,6 +57,8 @@ admin_route.get('/coupen-list',Auth.isLogin,coupenController.loadCoupenControlle
 admin_route.post('/insert-coupen',coupenController.insertCoupen)
 admin_route.post('/update-coupen/:id',coupenController.updateCoupen)
 admin_route.post('/delete-coupen',coupenController.deleteCoupen)
+admin_route.post('/add-offer',coupenController.addOffer)
+
 
 
 

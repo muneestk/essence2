@@ -1,0 +1,89 @@
+<%- include('../userlayout/header.ejs') %>
+<%- include('../userlayout/navbar.ejs') %>
+
+<!-- Ec breadcrumb end -->
+
+<!-- User profile section -->
+<section class="ec-page-content ec-vendor-uploads ec-user-account pb-5">
+
+  <div class="d-flex flex-column align-items-center">
+    <img src="/adminAssets/images/download-1013983.jpg" alt="success image" width="400px" height="400px" class="img-fluid">
+    <h1 class="text-center text-success mb-4">Order placed successfully</h1>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Product Name</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Order Id</th>
+                <th scope="col">Total Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (orders.products.length > 0) {
+              orders.products.forEach((order) => { %>
+              <tr>
+                <td>
+                  <img src="/adminAssets/adminImages/<%= order.productid.image[0] %>" alt="" width="50px" height="50px">
+                  <%= order.productid.productname %>
+                </td>
+                <td><%= order.count %></td>
+                <td><%= order.productid._id %></td>
+                <td>₹ <%= order.productPrice %>.00</td>
+              </tr>
+              <% }) } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8">
+        <div class="p-5 border">
+          <h1 class="text-center">Order Details</h1>
+          <p>
+            <span>Order Date: </span>
+            <span class="font-weight-bold">
+              <%= orders.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).replace(/\//g,'-') %>
+            </span>
+          </p>
+          <p>
+            <span>Total Amount: </span>
+            <span class="font-weight-bold">₹ <%= orders.totalAmount %>.00</span>
+          </p>
+          <p>
+            <span>Payment Method: </span>
+            <span class="font-weight-bold"><%= orders.paymentMethod %></span>
+          </p>
+          <p>
+            <span>Order Id: </span>
+            <span class="font-weight-bold"><%= orders._id %></span>
+          </p>
+          <p>
+            <span>Address: </span>
+            <span class="font-weight-bold"><%= orders.deliveryAddress %></span>
+          </p>
+          <p>
+            <span>Expected Date: </span>
+            <span class="font-weight-bold">
+              <%= expectedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).replace(/\//g,'-') %>
+            </span>
+          </p>
+          <div class="text-center">
+            <a href="/shop-page" class="btn btn-outline-success">Continue shopping</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('../userlayout/footer.ejs') %>

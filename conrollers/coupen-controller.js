@@ -1,5 +1,6 @@
 const User = require("../models/user-models");
 const Coupen = require('../models/coupen-model')
+const Product = require('../models/product-model')
 
 //load coupen list in admin page 
 
@@ -110,6 +111,30 @@ const applyCoupen = async(req,res,next)=>{
 }
 
 
+//add offer to product
+
+const addOffer = async(req,res,next)=>{
+    try {
+        const proId = req.body.proId
+        const percentage = req.body.percentage
+        const name = req.body.name
+        const updateProduct = await Product.findOneAndUpdate(
+            { _id: proId },
+            {
+              $set: {
+                discountName: name,
+                discountPercentage: percentage
+              }
+            },
+            { new: true }
+          );  
+         res.redirect("/admin/products-list");  
+
+    } catch (error) {
+        
+    }
+}
+
 
 
 
@@ -120,5 +145,6 @@ module.exports = {
     insertCoupen,
     updateCoupen,
     deleteCoupen,
-    applyCoupen
+    applyCoupen,
+    addOffer
 }

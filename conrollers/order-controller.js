@@ -24,6 +24,7 @@ const placeOrder = async (req, res) => {
 
     const status = paymentMethod === 'COD' ? 'placed' : 'pending';
   
+   
 
     const order = new Order({
       deliveryAddress: address,
@@ -36,9 +37,11 @@ const placeOrder = async (req, res) => {
       date: new Date(),
     });
     const orderData = await order.save();
+
+    const orderid = order._id
   
     if (orderData) {
-     
+        //cash on delivery
       if (order.status === 'placed') {
         await Cart.deleteOne({ userId: req.session.user_id });
         for (let i = 0; i < products.length; i++) {
@@ -47,8 +50,28 @@ const placeOrder = async (req, res) => {
           await Product.findByIdAndUpdate({ _id: pro }, { $inc: { quantity: -count } });
         }
   
-        res.json({ codsuccess: true });
+        res.json({ codsuccess: true ,orderid});
       } else {
+      
+        //wallet payment
+        if(order.paymentMethod === 'Wallet-Payment'){
+          const wallet = userData.wallet
+          if(wallet >= total){
+            await Cart.deleteOne({ userId: req.session.user_id });
+            for (let i = 0; i < products.length; i++) {
+              const pro = products[i].productid;
+              const count = products[i].count;
+              await Product.findByIdAndUpdate({ _id: pro }, { $inc: { quantity: -count } });
+              await User.findOneAndUpdate({_id:req.session.user_id},{$inc:{wallet: -total}})
+              await Order.findOneAndUpdate({_id:order._id},{$set:{status:"placed"}});
+              res.json({ codsuccess: true ,orderid});
+            }
+          }else{
+            res.json({walletFailed:true});
+          }
+        }else{
+
+          //razor payment
         const orderId = orderData._id;
         const totalAmount = orderData.totalAmount;
         var options = {
@@ -62,6 +85,7 @@ const placeOrder = async (req, res) => {
           
         });
       }
+    } 
     } else {
       res.redirect('/');
     }
@@ -92,7 +116,8 @@ const placeOrder = async (req, res) => {
         await Order.findByIdAndUpdate({_id:details.order.receipt},{$set:{status:"placed"}});
         await Order.findByIdAndUpdate({_id:details.order.receipt},{$set:{paymentId:details.payment.razorpay_payment_id}});
         await Cart.deleteOne({userId:req.session.user_id});
-        res.json({success:true});
+        const orderid = details.order.receipt 
+        res.json({ codsuccess: true ,orderid});
       }else{
         await Order.findByIdAndRemove({_id:details.order.receipt});
         res.json({success:false});
@@ -176,7 +201,8 @@ const loadOrderManagement = async(req,res) =>{
       const userData = await Order.findById(req.session.user_id)
       const orderData = await Order.findOne({ userId: req.session.user_id, 'products._id': id})
       const product = orderData.products.find((p) => p._id.toString() === id);
-      const cancelledAmount = product.totalPrice     
+      const cancelledAmount = product.totalPrice  
+      const productCount = product.count
       const updatedOrder = await Order.findOneAndUpdate(
         {
           userId: req.session.user_id,
@@ -184,7 +210,7 @@ const loadOrderManagement = async(req,res) =>{
         },
         {
           $set: {
-            'products.$.status': 'cancelled'
+            'products.$.status': 'cancelled',
           }
         },
         { new: true }
@@ -192,8 +218,11 @@ const loadOrderManagement = async(req,res) =>{
 
   
       if (updatedOrder) {
-        if(orderData.paymentMethod === 'online-payment'){
+        if(orderData.paymentMethod === 'online-payment' || orderData.paymentMethod === 'Wallet-Payment'){
            await User.findByIdAndUpdate({_id:req.session.user_id},{$inc:{wallet:cancelledAmount}})
+           await Product.findByIdAndUpdate({_id:id},{$inc:{quantity:productCount}})
+           await Order.findOneAndUpdate({userId:req.session.user_id,'products._id': id},{$inc:{'products.$.totalPrice':-cancelledAmount}})
+           await Order.findOneAndUpdate({userId:req.session.user_id,'products._id': id},{$inc:{totalAmount:-cancelledAmount}})
            res.json({ success: true });
         }else{
            res.json({ success: true });
@@ -234,6 +263,24 @@ const loadOrderManagement = async(req,res) =>{
   }
 
 
+  //load order success page
+  
+  const loadOrderSuccess = async(req,res)=>{
+    try {
+      const id = req.params.id
+      const session = req.session.user_id
+      const orderData = await Order.findOne({_id : id }).populate(
+        "products.productid"
+      );
+      const orderDate = orderData.date
+      const expectedDate  = new Date(orderDate.getTime() + (5 * 24 * 60 * 60 * 1000));
+      res.render('order-success', { session,orders:orderData,expectedDate});
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  
+
 
 
     module.exports = {
@@ -244,5 +291,6 @@ const loadOrderManagement = async(req,res) =>{
         loadOrderManagement,
         loadSingleDetails,
         changeStatus,
-        orderCancel
+        orderCancel,
+        loadOrderSuccess
     }
