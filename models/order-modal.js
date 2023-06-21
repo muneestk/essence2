@@ -34,6 +34,12 @@ const orderSchema = new mongoose.Schema({
     status:{
       type:String,
       default:'placed'
+    },
+    cancelReason:{
+      type:String,
+    },
+    returnReason:{
+      type:String
     }
 
   }],

@@ -225,7 +225,11 @@
                                                                     alt="Product image" width="250px" height="300px" />
 
                                                             </a>
-                                                            <span class="percentage">20%</span>
+                                                            <% if ( product[i].discountPercentage <= 0) {
+                                                                
+                                                            }else{  %>
+                                                            <span class="percentage"><%= product[i].discountPercentage %>%</span>
+                                                             <% } %>
 
                                                             <div class="ec-pro-actions">
                                                                 <button title="Add To Cart"
@@ -250,7 +254,24 @@
 
                                                         <div class="ec-pro-list-desc"></div>
                                                         <span class="ec-price">
+                                                            <% 
+                                                              const discount =  product[i].discountPercentage 
+
+                                                               const price =  product[i].price 
+
+                                                               const disAmount = Math.round((price*discount)/100)
+
+                                                               const total = price - disAmount
+
+
+                                                            %>
+                                                            <% if(disAmount <= 0) {%>
                                                             <span class="new-price">₹ <%= product[i].price %>.00</span>
+                                                            <% }else{ %>
+                                                                <del class="new-price text-danger">₹ <%= product[i].price %>.00</del> 
+                                                                <span class="new-price">₹ <%= total %>.00</span>
+
+                                                                <% } %>
                                                         </span>
                                                     </div>
                                                 </div>

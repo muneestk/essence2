@@ -47,14 +47,36 @@
                                                 <img class="main-image" width="300px" height="300px" src="/adminAssets/adminImages/<%= wish.productId.image[0] %>" alt="Product" />
                                             </a>
                                             <a href="/delete-wishlist?id=<%= wish.productId._id %>"> <span class="ec-com-remove">×</span></a>
-                                            <span class="percentage">20%</span>
+                                            <% if ( wish.productId.discountPercentage <= 0) {
+                                                                
+                                                            }else{  %>
+                                                            <span class="percentage"><%= wish.productId.discountPercentage %>%</span>
+                                                             <% } %>
                                         </div>
                                     </div>
                                     <div class="ec-pro-content text-center">
                                         <h5 class="ec-pro-title"><a href="product-left-sidebar.html"><%= wish.productId.productname %></a></h5>
                                         <div class="ec-pro-list-desc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dutmmy text ever since the 1500s, when an unknown printer took a galley.</div>
                                         <div class="ec-price d-flex justify-content-center">
-                                            <h6 class="new-price">$<%= wish.productId.price %>.00</h6>
+                                            <% 
+                                                              const discount = wish.productId.discountPercentage 
+
+                                                               const price =  wish.productId.price 
+
+                                                               const disAmount = Math.round((price*discount)/100)
+
+                                                               const total = price - disAmount
+
+
+                                                            %>
+                                                            <% if(disAmount <= 0) {%>
+                                                            <span class="new-price">₹ <%= wish.productId.price %>.00</span>
+                                                            <% }else{ %>
+                                                                <del class="new-price text-danger">₹ <%= wish.productId.price %>.00</del> 
+                                                                <span class="new-price">₹ <%= total %>.00</span>
+
+                                                                <% } %>
+                                          
                                         </div>
                                         <div>
                                             <button class="btn btn-success" onclick="addtocart('<%= wish.productId._id %>')">Add to Cart</button>

@@ -16,7 +16,6 @@ const coupenSchema = mongoose.Schema({
     user:{
         type:Array,
         ref:"user",
-        default:[]
     },
     status:{
         type:Boolean,

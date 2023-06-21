@@ -99,9 +99,7 @@ const editProduct = async (req, res) => {
   }
 };
 
-
-
-
+//remove images in product list
 
 const removeImg = async (req, res) => {
   try {
@@ -141,8 +139,6 @@ const saveProduct = async (req, res) => {
     });
   } else {
     try {
-      console.log(req.body.percentage);
-      console.log(req.body.discountname);
       const id = req.params.id;
       const images = req.files.map(file => file.filename);
 
@@ -165,12 +161,7 @@ const saveProduct = async (req, res) => {
   }
 };
 
-
-
-
 //for update images in edit
-
-
 
 const updateimage = async (req, res) => {
   try {

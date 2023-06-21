@@ -99,21 +99,29 @@ const addToCart = async (req, res) => {
 
     const cartProduct = cartData.products.find((product) => product.productid === productId);
 
+    const discount =  productData.discountPercentage 
+
+     const price =  productData.price 
+
+     const disAmount = Math.round((price*discount)/100)
+
+     const total = price - disAmount
+
     if (cartProduct) {
       await Cart.updateOne(
         { userId: userId, "products.productid": productId },
         {
           $inc: {
             "products.$.count": 1,
-            "products.$.totalPrice": productData.price,
+            "products.$.totalPrice": total,
           },
         }
       );
     } else {
       cartData.products.push({
         productid: productId,
-        productPrice: productData.price,
-        totalPrice: productData.price,
+        productPrice: total,
+        totalPrice: total,
       });
       await cartData.save();
     }
@@ -173,11 +181,20 @@ const changeProductCount = async (req, res) => {
     const updateCartData = await Cart.findOne({ userId: userData });
     const updateProduct = updateCartData.products.find((product) => product.productid === proId);
     const updateQuantity = updateProduct.count;
-    const price = updateQuantity * productData.price;
+
+    const discount =  productData.discountPercentage 
+
+    const price =  productData.price 
+
+    const disAmount = Math.round((price*discount)/100)
+
+    const total = price - disAmount
+
+    const priceChange = updateQuantity * total;
     
     await Cart.updateOne(
       { userId: userData, "products.productid": proId },
-      { $set: { "products.$.totalPrice": price } }
+      { $set: { "products.$.totalPrice": priceChange } }
     );
     
     res.json({ success: true });

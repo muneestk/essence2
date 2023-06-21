@@ -80,8 +80,24 @@
                                             <div class="ec-single-price-stoke">
                                                 <div class="ec-single-price">
                                                     <span class="ec-single-ps-title">As low as</span>
-                                                    <span class="new-price">₹ <%= product.price %>.00</span>
-                                                </div>
+                                                    <% 
+                                                    const discount =  product.discountPercentage 
+
+                                                     const price =  product.price 
+
+                                                     const disAmount = Math.round((price*discount)/100)
+
+                                                     const total = price - disAmount
+
+
+                                                  %>
+                                                  <% if(disAmount <= 0) {%>
+                                                  <span class="new-price">₹ <%= product.price %>.00</span>
+                                                  <% }else{ %>
+                                                      <del class="new-price text-danger">₹ <%= product.price %>.00</del> 
+                                                      <span class="new-price">₹ <%= total %>.00</span>
+
+                                                      <% } %>                                                </div>
                                                 <div class="ec-single-stoke">
                                                     <% if(product.quantity !== 0){ %>
                                                         <span class="ec-single-ps-title text-success">IN STOCK</span>

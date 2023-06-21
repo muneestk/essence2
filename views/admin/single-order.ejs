@@ -110,10 +110,19 @@
               <td><%= order.count %></td>
               <td><%= order.productid._id %></td>
               <td><%= order.productPrice %></td>
-              <td>
+            
                 <% if(order.status === 'cancelled') { %>
+                  <td>
                   <p class="text-danger">cancelled</p>
+                  <button class="btn btn-outline-secondary"  data-toggle="modal" data-target="#reasonModal">Reason</button>
+                  </td>      
+                <% }else if(order.status === 'returned') { %>
+                  <td>
+                  <p class="text-warning">Returned</p>
+                  <button class="btn btn-outline-secondary"  data-toggle="modal" data-target="#reasonModal">Reason</button>
+                  </td>      
                 <% } else { %>
+                  <td>
                   <div class="dropdown show" style="position: absolute !important;">
                     <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <%= order.status %>
@@ -125,9 +134,37 @@
                       
                     </div>     
                   </div>
+                </td>
+
                 <% } %>
-              </td>
             </tr>
+            <!-- Modal for reason -->
+        <div class="modal fade" id="reasonModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title fs-5" id="exampleModalLabel">REASON</h4>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div>
+                    <h4 class="text-center">
+                      <% if(order.status === 'cancelled') { %> 
+                      <%= order.cancelReason %>
+                      <% }else{  %>
+                        <%= order.returnReason %>
+                      <% } %>
+                    </h4>
+                  </div>
+        
+                  <div class="form-group d-flex justify-content-end">
+                    <button class="btn btn-secondary" id="Cancel" data-bs-dismiss="modal">Ok</button>
+                  </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
             <% }) } %>
           </tbody>
         </table>
