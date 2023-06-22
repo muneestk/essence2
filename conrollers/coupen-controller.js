@@ -79,7 +79,6 @@ const deleteCoupen = async(req,res,next) =>{
     }
 }
 
-
 //applying coupen in user side
 
 const applyCoupen = async(req,res,next)=>{
@@ -110,7 +109,6 @@ const applyCoupen = async(req,res,next)=>{
     }
 }
 
-
 //add offer to product
 
 const addOffer = async(req,res,next)=>{
@@ -134,11 +132,6 @@ const addOffer = async(req,res,next)=>{
         
     }
 }
-
-
-
-
-
 
 module.exports = {
     loadCoupenController,

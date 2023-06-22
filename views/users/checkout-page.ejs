@@ -241,7 +241,6 @@
                           const startDate = coupen.startDate;
                           const expiryDate = coupen.expiryDate;
 
-                          // Calculate the difference in milliseconds
                           const dateDiff = expiryDate.getTime() - startDate.getTime();
 
                           const daysDiff = Math.ceil(dateDiff / (1000 * 60 * 60 * 24));

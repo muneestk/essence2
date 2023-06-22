@@ -1,7 +1,8 @@
 const User = require("../models/user-models");
 const bcrypt = require("bcrypt");
 const category = require("../models/catogory-model")
-const Order = require("../conrollers/order-controller")
+const Order = require("../models/order-modal")
+const Product = require("../models/product-model")
 
 
 //loading admin login page
@@ -12,7 +13,7 @@ const Order = require("../conrollers/order-controller")
     } catch (error) {
       console.log(error.message);
     }
-  };
+  };  
 
 //verify admin in login page
   
@@ -49,12 +50,151 @@ const verifyLogin = async (req, res ,next) => {
   }
 };
 
+//loading sales report page 
+
+const loadSalesReport = async(req,res) =>{
+  try {
+    const adminData = await User.findById({ _id: req.session.Auser_id });
+   const order = await Order.aggregate([
+  { $unwind: "$products" },
+  { $match: { 'products.status': 'Delivered' } },
+  { $sort: { date: -1 } },
+  {
+    $lookup: {
+      from: 'products',
+      let: { productId: { $toObjectId: '$products.productid' } },
+      pipeline: [
+        { $match: { $expr: { $eq: ['$_id', '$$productId'] } } }
+      ],
+      as: 'products.productDetails'
+    }
+  },  
+  {
+    $addFields: {
+      'products.productDetails': { $arrayElemAt: ['$products.productDetails', 0] }
+    }
+  }
+]);
+    res.render("sales-report", { order ,admin:adminData });
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+//LOADING GENARATE PDF
+
+const loadGenaratePdf  = async(req,res) =>{
+  try {
+    const adminData = await User.findById({ _id: req.session.Auser_id });
+   const order = await Order.aggregate([
+  { $unwind: "$products" },
+  { $match: { 'products.status': 'Delivered' } },
+  { $sort: { date: -1 } },
+  {
+    $lookup: {
+      from: 'products',
+      let: { productId: { $toObjectId: '$products.productid' } },
+      pipeline: [
+        { $match: { $expr: { $eq: ['$_id', '$$productId'] } } }
+      ],
+      as: 'products.productDetails'
+    }
+  },  
+  {
+    $addFields: {
+      'products.productDetails': { $arrayElemAt: ['$products.productDetails', 0] }
+    }
+  }
+]);
+    res.render("genarate-pdf", { order ,admin:adminData });
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+
 //loading dashboard
+
 
 const loadDashboard = async (req, res ,next) => {
   try {
+    const user = await User.find()
+    const orders =await Order.find()
+    const order = await Order.find({'products.status': 'Delivered' })
+    .populate('products.productid')
+    .sort({ date: -1 });  
+    const product = await Product.find() 
     const adminData = await User.findById({ _id: req.session.Auser_id });
-    res.render("dash-board", { admin: adminData });
+
+    //find total delivered sale
+
+    const result = await Order.aggregate([
+      { $unwind: "$products" },
+      { $match: { 'products.status': 'Delivered' } },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: '$products.totalPrice' }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          total: 1
+        }
+      }
+    ]);
+    const total = result[0].total;
+
+    //total cod sale
+
+    const codResult = await Order.aggregate([
+      { $unwind: "$products" },
+      { $match: { 'products.status': 'Delivered', paymentMethod: 'COD' } },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: '$products.totalPrice' }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          total: 1
+        }
+      }
+    ]);
+    
+    let codTotal = 0
+    if (codResult.length > 0) {
+      codTotal = codResult[0].total;
+    } 
+
+    //total online payment and wallet
+    const onlineResult = await Order.aggregate([
+      { $unwind: "$products" },
+      { $match: { 'products.status': 'Delivered', 'paymentMethod': { $ne: 'COD' } } },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: '$products.totalPrice' }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          total: 1
+        }
+      }
+    ]);
+    
+    let onlineTotal = 0;
+    if (onlineResult.length > 0) {
+      onlineTotal = onlineResult[0].total;
+    }
+    
+
+    res.render("dash-board", { admin: adminData , user , order , product , total , codTotal , onlineTotal , orders });
   } catch (error) {
     next(error)
     console.log(error.message);
@@ -81,7 +221,7 @@ const loadUsers= async (req, res) => {
 
 const block = async (req,res)=> {
   try {
-    const userData = await User.findByIdAndUpdate(req.query.id,{$set:{is_block:true}})
+    await User.findByIdAndUpdate(req.query.id,{$set:{is_block:true}})
     req.session.user_id = null
     res.redirect("/admin/users-list")
   } catch (error) {
@@ -93,7 +233,7 @@ const block = async (req,res)=> {
 
 const unblock = async (req,res)=> {
   try {
-    const userData = await User.findByIdAndUpdate(req.query.id,{$set:{is_block:false}})
+    await User.findByIdAndUpdate(req.query.id,{$set:{is_block:false}})
     res.redirect("/admin/users-list")
   } catch (error) {
     console.log(error.message);
@@ -119,6 +259,7 @@ const logout = async (req, res) => {
     logout,
     loadUsers,
     block,unblock,
-   
+    loadSalesReport,
+    loadGenaratePdf
 
   }

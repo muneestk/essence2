@@ -1,90 +1,284 @@
 <%- include('../adminlayout/header.ejs') %>
-  <%- include('../adminlayout/sidebar.ejs') %>
-    <%- include('../adminlayout/navbar.ejs') %>
-
-      <!-- partial -->
-      <div class="main-panel">
-        <div class="content-wrapper">
-          <div class="page-header">
-            <h3 class="page-title"> Chart-js </h3>
-            <nav aria-label="breadcrumb">
-              <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Charts</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Chart-js</li>
-              </ol>
-            </nav>
-          </div>
-          <div class="row">
-            <div class="col-lg-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Line chart</h4>
-                  <canvas id="lineChart" style="height:250px"></canvas>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Bar chart</h4>
-                  <canvas id="barChart" style="height:230px"></canvas>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Area chart</h4>
-                  <canvas id="areaChart" style="height:250px"></canvas>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Doughnut chart</h4>
-                  <canvas id="doughnutChart" style="height:250px"></canvas>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Pie chart</h4>
-                  <canvas id="pieChart" style="height:250px"></canvas>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Scatter chart</h4>
-                  <canvas id="scatterChart" style="height:250px"></canvas>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- content-wrapper ends -->
-        <!-- partial:../../partials/_footer.html -->
-        <footer class="footer">
-          <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com
-              2020</span>
-            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a
-                href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin
-                templates</a> from Bootstrapdash.com</span>
-          </div>
-        </footer>
+<%- include('../adminlayout/sidebar.ejs') %>
+<%- include('../adminlayout/navbar.ejs') %>
+      
         <!-- partial -->
-      </div>
-      <!-- main-panel ends -->
-      </div>
+        
+
+
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              
+               <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Transaction History</h4>
+                    <canvas id="transaction-history" class="transaction-chart"></canvas>
+                    <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
+                      <div class="text-md-center text-xl-left">
+                        <h6 class="mb-1">Online and Wallet</h6>
+                        <p class="text-muted mb-0"></p>
+                      </div>
+                      <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
+                        <h6 class="font-weight-bold mb-0">₹ <%= onlineTotal %></h6>
+                      </div>
+                    </div>
+                    <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
+                      <div class="text-md-center text-xl-left">
+                        <h6 class="mb-1">Cash On Delivery</h6>
+                        <p class="text-muted mb-0"></p>
+                      </div>
+                      <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
+                        <h6 class="font-weight-bold mb-0">₹ <%= codTotal %></h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> 
+              
+             
+               <div class="col-sm-4 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                  <h5>USERS</h5>
+                  <div class="row">
+                    <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                      <div class="d-flex d-sm-block d-md-flex align-items-center">
+                        <h2 class="mb-0"><%= user.length %></h2>
+                        <p class="text-success ml-2 mb-0 font-weight-medium">Active users</p>
+                      </div>
+                      
+                    </div>
+                    <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                      <i class="icon-lg mdi mdi-account text-primary ml-auto"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card mt-5">
+                <div class="card-body">
+                  <h5>PRODUCT</h5>
+                  <div class="row">
+                    <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                      <div class="d-flex d-sm-block d-md-flex align-items-center">
+                        <h2 class="mb-0"><%= product.length %></h2>
+                        <p class="text-danger ml-2 mb-0 font-weight-medium">products </p>
+                      </div>
+                      
+                    </div>
+                    <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                      <i class="icon-lg mdi mdi-database text-success ml-auto"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="col-sm-4 grid-margin">
+              <div class="card ">
+                <div class="card-body">
+                  <h5>SALES</h5>
+                  <div class="row">
+                    <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                      <div class="d-flex d-sm-block d-md-flex align-items-center">
+                        <h2 class="mb-0">₹ <%= total %></h2>
+                        <p class="text-success ml-2 mb-0 font-weight-medium">total sales</p>
+                      </div>
+                     
+                    </div>
+                    <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                      <i class="icon-lg mdi mdi-wallet-travel text-danger ml-auto"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card mt-5">
+                <div class="card-body">
+                  <h5>ORDERS</h5>
+                  <div class="row">
+                    <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                      <div class="d-flex d-sm-block d-md-flex align-items-center">
+                        <h2 class="mb-0"><%= orders.length %></h2>
+                        <p class="text-danger ml-2 mb-0 font-weight-medium">current orders</p>
+                      </div>
+                      
+                    </div>
+                    <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                      <i class="icon-lg mdi mdi-shopping text-success ml-auto"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="col-sm-4 grid-margin">
+             
+            </div>
+            <div class="col-sm-4 grid-margin">
+            
+            </div>
 
 
 
-      <%- include('../adminlayout/footer.ejs') %>
+
+
+            </div>
+            </div>
+            </div>
+
+          <!-- content-wrapper ends -->
+          <script>
+  (function($) {
+      'use strict';
+
+      $.fn.andSelf = function() {
+        return this.addBack.apply(this, arguments);
+      }
+
+      $(function() {
+        if ($("#transaction-history").length) {
+          var areaData = {
+            labels: ["", "Cash on delivery", "online payment"],
+            datasets: [{
+              data: [0, '<%=codTotal %>', '<%=onlineTotal %>'],
+              backgroundColor: ["#111111", "#00d25b", "#ffab00"]
+            }]
+          };
+          var areaOptions = {
+            responsive: true,
+            maintainAspectRatio: true,
+            segmentShowStroke: false,
+            cutoutPercentage: 70,
+            elements: {
+              arc: {
+                borderWidth: 0
+              }
+            },
+            legend: {
+              display: false
+            },
+            tooltips: {
+              enabled: true
+            }
+          };
+          var transactionhistoryChartPlugins = {
+            beforeDraw: function(chart) {
+              var width = chart.chart.width,
+                height = chart.chart.height,
+                ctx = chart.chart.ctx;
+
+              ctx.restore();
+              var fontSize = 1;
+              ctx.font = fontSize + "rem sans-serif";
+              ctx.textAlign = 'left';
+              ctx.textBaseline = "middle";
+              ctx.fillStyle = "#ffffff";
+
+              var text = "₹<%= total %>",
+                textX = Math.round((width - ctx.measureText(text).width) / 2),
+                textY = height / 2.4;
+
+              ctx.fillText(text, textX, textY);
+
+              ctx.restore();
+              var fontSize = 0.75;
+              ctx.font = fontSize + "rem sans-serif";
+              ctx.textAlign = 'left';
+              ctx.textBaseline = "middle";
+              ctx.fillStyle = "#6c7293";
+
+              var texts = "Total",
+                textsX = Math.round((width - ctx.measureText(text).width) / 1.93),
+                textsY = height / 1.7;
+
+              ctx.fillText(texts, textsX, textsY);
+              ctx.save();
+            }
+          };
+          var transactionhistoryChartCanvas = $("#transaction-history").get(0).getContext("2d");
+          var transactionhistoryChart = new Chart(transactionhistoryChartCanvas, {
+            type: 'doughnut',
+            data: areaData,
+            options: areaOptions,
+            plugins: transactionhistoryChartPlugins
+          });
+        }
+
+        if ($("#transaction-history-arabic").length) {
+          var areaData = {
+            labels: ["Paypal", "Stripe", "Cash"],
+            datasets: [{
+              data: [55, 25, 20],
+              backgroundColor: ["#111111", "#00d25b", "#ffab00"]
+            }]
+          };
+          var areaOptions = {
+            responsive: true,
+            maintainAspectRatio: true,
+            segmentShowStroke: false,
+            cutoutPercentage: 70,
+            elements: {
+              arc: {
+                borderWidth: 0
+              }
+            },
+            legend: {
+              display: false
+            },
+            tooltips: {
+              enabled: true
+            }
+          };
+          var transactionhistoryChartPlugins = {
+            beforeDraw: function(chart) {
+              var width = chart.chart.width,
+                height = chart.chart.height,
+                ctx = chart.chart.ctx;
+
+              ctx.restore();
+              var fontSize = 1;
+              ctx.font = fontSize + "rem sans-serif";
+              ctx.textAlign = 'left';
+              ctx.textBaseline = "middle";
+              ctx.fillStyle = "#ffffff";
+
+              var text = "$1200",
+                textX = Math.round((width - ctx.measureText(text).width) / 2),
+                textY = height / 2.4;
+
+              ctx.fillText(text, textX, textY);
+
+              ctx.restore();
+              var fontSize = 0.75;
+              ctx.font = fontSize + "rem sans-serif";
+              ctx.textAlign = 'left';
+              ctx.textBaseline = "middle";
+              ctx.fillStyle = "#6c7293";
+
+              var texts = "مجموع",
+                textsX = Math.round((width - ctx.measureText(text).width) / 1.93),
+                textsY = height / 1.7;
+
+              ctx.fillText(texts, textsX, textsY);
+              ctx.save();
+            }
+          };
+          var transactionhistoryChartCanvas = $("#transaction-history-arabic").get(0).getContext("2d");
+          var transactionhistoryChart = new Chart(transactionhistoryChartCanvas, {
+            type: 'doughnut',
+            data: areaData,
+            options: areaOptions,
+            plugins: transactionhistoryChartPlugins
+          });
+        }
+      });
+
+    })(jQuery);
+          </script>
+          <%- include('../adminlayout/footer.ejs') %>

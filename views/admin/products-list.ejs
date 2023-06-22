@@ -68,7 +68,7 @@
                         </td>
                         <td><a class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal<%= product[i]._id  %>" >Delete</a><br>
                           <a class="btn btn-outline-primary my-2" href="/admin/edit-product/<%= product[i]._id %>">Edit</a><br>
-                          <a class="btn btn-outline-success" >Add Offer</a>
+                          <a class="btn btn-outline-success" data-toggle="modal" data-target="#addModal<%= product[i]._id  %>" >Add Offer</a>
 
                     <!-- Modal for delete -->
                   <div class="modal fade" id="deleteModal<%= product[i]._id %>">
