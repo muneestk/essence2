@@ -512,21 +512,40 @@ const searchProducts = async (req, res) => {
 const priceSort = async(req,res,next) =>{
   try {
     const id = parseInt(req.params.id)
-    console.log(typeof id);
     const categoryData = await category.find({ is_delete: false });
     const session = req.session.user_id;
-    const sortData = await Product.find({is_delete:false}).sort({price:id})
-    console.log(sortData);
-    if(sortData){
-      res.render("shop-page", {
-        product: sortData,
-        session,
-        category: categoryData,
-      });
-    }else{
-        res.render("shop-page", { product: [], session, category: categoryData });
+    const products = await Product.find({ is_delete: false });
+     
+  const discountedProducts = products.map(product => {
+  const discountPrice = product.price - (product.price * product.discountPercentage / 100);
+  return { ...product.toObject(), discountedPrice: discountPrice };
+});
+if(id == 1){
+const sortedData = discountedProducts.sort((a, b) => a.discountedPrice - b.discountedPrice);
+   if(sortedData){
+  res.render("shop-page", {
+    product: sortedData,
+    session,
+    category: categoryData,
+    });  
+  }else{
+    res.render("shop-page", { product: [], session, category: categoryData });
 
-    }
+}
+}else{
+  const sortedData = discountedProducts.sort((a, b) =>  b.discountedPrice - a.discountedPrice);
+  if(sortedData){
+    res.render("shop-page", {
+      product: sortedData,
+      session,
+      category: categoryData,
+    });
+  }else{
+      res.render("shop-page", { product: [], session, category: categoryData });
+  
+  }
+}
+    
   } catch (error) {
     console.log(error.message);
   }

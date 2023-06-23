@@ -140,7 +140,6 @@ const loadOrderManagement = async(req,res) =>{
   }
 }
 
-
   //single order detail page in adminside
 
   const loadSingleDetails = async(req,res)=>{
@@ -281,10 +280,6 @@ const loadOrderManagement = async(req,res) =>{
     }
   };
 
-
-
-
-
   //changing order status
 
   const changeStatus = async(req,res) =>{
@@ -304,6 +299,24 @@ const loadOrderManagement = async(req,res) =>{
         },
         { new: true }
       );
+      if(statusChange === 'Delivered'){
+        const expiryDateTimestamp = new Date().getTime() + (7 * 24 * 60 * 60 * 1000);
+        const expiryDate = new Date(expiryDateTimestamp);
+
+        await Order.findOneAndUpdate(
+          {
+            userId: userId,
+            'products._id': id
+          },
+          {
+            $set: {
+              'products.$.expiryDate': expiryDate
+            },
+          },
+          {
+            new: true
+          });
+      }
       if(updatedOrder){
         res.json({success:true})
       }

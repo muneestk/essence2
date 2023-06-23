@@ -74,7 +74,22 @@
                             <td>
                                 <% if (order.status === 'cancelled') { %>
                                 <% } else if (order.status === 'Delivered') { %>
-                                <button data-bs-toggle="modal" data-bs-target="#returnModal-<%= order._id %>"  class="btn btn-outline-danger">Return</button>
+                                    <%
+                                    let daysDiff
+                                    const todayDate = new Date();
+                                    const expiryDate = new Date(order.expiryDate);
+                                    if (todayDate <= expiryDate){
+                                        const dateDiff = expiryDate.getTime() - todayDate.getTime();
+                                         daysDiff = Math.ceil(dateDiff / (1000 * 60 * 60 * 24));
+                                    }
+                                        %>
+
+                                        <% if (todayDate >= expiryDate) { %>
+                                        <p>Return Expired</p>
+                                        <% } else { %>
+                                        <button data-bs-toggle="modal" data-bs-target="#returnModal-<%= order._id %>" class="btn btn-outline-danger">Return</button><br>
+                                        <span><%= daysDiff %> days left until return expires</span>
+                                        <% } %>
                                 <% } else if (order.status === 'Out For Delivery') { %>
                                 <p class="text-success">out for delivery</p>
                                 <% } else if (order.status === 'returned') { %>

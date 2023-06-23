@@ -1,9 +1,7 @@
 const User = require("../models/user-models");
 const bcrypt = require("bcrypt");
-const category = require("../models/catogory-model")
 const Order = require("../models/order-modal")
 const Product = require("../models/product-model")
-
 
 //loading admin login page
 
@@ -81,36 +79,8 @@ const loadSalesReport = async(req,res) =>{
   }
 }
 
-//LOADING GENARATE PDF
 
-const loadGenaratePdf  = async(req,res) =>{
-  try {
-    const adminData = await User.findById({ _id: req.session.Auser_id });
-   const order = await Order.aggregate([
-  { $unwind: "$products" },
-  { $match: { 'products.status': 'Delivered' } },
-  { $sort: { date: -1 } },
-  {
-    $lookup: {
-      from: 'products',
-      let: { productId: { $toObjectId: '$products.productid' } },
-      pipeline: [
-        { $match: { $expr: { $eq: ['$_id', '$$productId'] } } }
-      ],
-      as: 'products.productDetails'
-    }
-  },  
-  {
-    $addFields: {
-      'products.productDetails': { $arrayElemAt: ['$products.productDetails', 0] }
-    }
-  }
-]);
-    res.render("genarate-pdf", { order ,admin:adminData });
-  } catch (error) {
-    console.log(error.message);
-  }
-}
+
 
 
 //loading dashboard
@@ -260,6 +230,5 @@ const logout = async (req, res) => {
     loadUsers,
     block,unblock,
     loadSalesReport,
-    loadGenaratePdf
 
   }

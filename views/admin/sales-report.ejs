@@ -2,14 +2,14 @@
   <%- include('../adminlayout/sidebar.ejs') %>
     <%- include('../adminlayout/navbar.ejs') %>
     <div class="content-wrapper mt-5">
-    <div class="row mt-4">
+     <div class="row mt-4">
         <div class="col-12 grid-margin">
           <div class="card">
             <div class="card-body">
-              <h4 class="card-title">Order Status</h4>
+              <h4 class="card-title">Sales Report</h4>
               <div class="table-responsive">
                
-                <table class="table">
+                <table class="table" id="example">
               
                   <thead>
                     <tr>
@@ -53,6 +53,51 @@
       </div>
       
     </div>
+
+    <style>
+        .dt-button.buttons-excel,
+        .dt-button.buttons-csv,
+        .dt-button.buttons-pdf {
+          background-color: #25cf0b;
+          /* Change background color */
+          color: white;
+          /* Change text color */
+          border-radius: 5px;
+          /* Add rounded corners */
+          border: none;
+          /* Remove border */
+          margin: 10px;
+          /* Add some spacing between buttons */
+          padding: 8px 16px;
+          /* Increase padding */
+        }
+      </style>
+    
+    
+      <style>
+        .dt-button.buttons-copy,
+        .dt-button.buttons-print {
+          background-color: #ec4503;
+          color: white;
+          border-radius: 5px;
+          border: none;
+          margin-right: 10px;
+          padding: 8px 16px;
+        }
+    
+        
+      </style>
+    <script>
+        $(document).ready(function () {
+          $('#example').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+               'excel', 'pdf'
+            ]
+          });
+        });
+      </script>
+    
 
 
 

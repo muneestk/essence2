@@ -19,7 +19,6 @@ admin_route.set("views", "./views/admin");
 admin_route.get("/",Auth.isLogout,adminController.loadLogin);
 admin_route.get("/dash-board", Auth.isLogin, adminController.loadDashboard);
 admin_route.get("/sales-report", Auth.isLogin, adminController.loadSalesReport);
-admin_route.get("/genarate-pdf", Auth.isLogin, adminController.loadGenaratePdf);
 admin_route.get("/logout", adminController.logout);
 admin_route.get("/users-list", Auth.isLogin, adminController.loadUsers);
 admin_route.post("/",adminController.verifyLogin);

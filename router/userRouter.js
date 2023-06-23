@@ -24,11 +24,9 @@ user_route.get('/shop-page',auth.blocked,auth.isLogin,userController.loadShop)
 user_route.get('/showProduct',userController.loadSingleProduct)
 user_route.get('/user-profile',auth.isLogin,auth.blocked,userController.loaduserprofile)
 user_route.get('edit-profile/:id',auth.isLogin,userController.editProfile)
-user_route.get('/filter-category/:id',userController.filterCategory)
+user_route.get('/filter-category/:id',auth.isLogin,userController.filterCategory)
 user_route.get('/forgot-password',userController.loadForgotPassword)
-user_route.get('/price-sort/:id',userController.priceSort)
-
-
+user_route.get('/price-sort/:id',auth.isLogin,userController.priceSort)
 
 user_route.post('/resubmit-password',userController.resubmitPassword)
 user_route.post('/verify-forgot',userController.verifForgotMail)
@@ -53,26 +51,25 @@ user_route.post('/change-quantity',auth.isLogin,cartController.changeProductCoun
 user_route.get('/add-address',auth.isLogin,addressController.loadAddAddress)
 user_route.get('/edit-address',auth.isLogin,addressController.loadEditAddress)
 user_route.post('/add-address',auth.isLogin,addressController.insertAddress)
-user_route.post('/update-address',auth.isLogin,addressController.updateAddress)
+user_route.post('/update-address',addressController.updateAddress)
 user_route.post('/delete-address',addressController.deleteAddress)
 
 //wishlist controller
 
-user_route.get('/delete-wishlist',wishlistController.deleteWishlist)
-user_route.get('/delete-wishlist-single',wishlistController.deleteSingleWishlist)
+user_route.get('/delete-wishlist',auth.isLogin,wishlistController.deleteWishlist)
+user_route.get('/delete-wishlist-single',auth.isLogin,wishlistController.deleteSingleWishlist)
 user_route.get('/wishlist-page',auth.isLogin,wishlistController.wishlistLoad)
 user_route.post('/addtoWishlist',wishlistController.addToWishlist)
 
 //order controller
 
 user_route.get('/my-orders',auth.isLogin,orderController.loadMyOrder)
-user_route.get('/single-order-page/:id',orderController.loadSingleOrder)
-user_route.get('/order-success/:id',orderController.loadOrderSuccess)
+user_route.get('/single-order-page/:id',auth.isLogin,orderController.loadSingleOrder)
+user_route.get('/order-success/:id',auth.isLogin,orderController.loadOrderSuccess)
 user_route.post('/cancel-order',orderController.orderCancel)
 user_route.post('/return-order',orderController.orderReturn)
 user_route.post('/checkout-page',orderController.placeOrder)
 user_route.post('/verify-payment',orderController.verifyPayment)
-
 
 //coupen controller
 
