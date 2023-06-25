@@ -68,11 +68,22 @@ const loadShop = async (req, res) => {
     const session = req.session.user_id;
     const productData = await Product.find({ is_delete: false });
 
+    const page = parseInt(req.query.page) || 1; 
+    const limit = 4; 
+    const startIndex = (page - 1) * limit; 
+    const endIndex = page * limit; 
+    const productCount = productData.length;
+    const totalPages = Math.ceil(productCount / limit); 
+    const paginatedProducts = productData.slice(startIndex, endIndex);
+
     if (!session) {
       return res.render("shop-page", {
         session: session,
         product: productData,
         category: categoryData,
+        product: paginatedProducts, 
+        currentPage: page,
+        totalPages: totalPages
       });
     }
 
@@ -81,8 +92,10 @@ const loadShop = async (req, res) => {
       return res.render("shop-page", {
         user: userData,
         session,
-        product: productData,
         category: categoryData,
+        product: paginatedProducts, 
+        currentPage: page,
+        totalPages: totalPages
       });
     } else {
       const session = null;
@@ -90,6 +103,9 @@ const loadShop = async (req, res) => {
         session,
         product: productData,
         category: categoryData,
+        product: paginatedProducts, 
+        currentPage: page,
+        totalPages: totalPages
       });
     }
   } catch (error) {
@@ -458,19 +474,30 @@ const filterCategory = async (req, res) => {
     const session = req.session.user_id;
     const catName = req.params.id;
     const categoryData = await category.find({ is_delete: false });
+    const page = parseInt(req.query.page) || 1; 
+    const limit = 4; 
+    const startIndex = (page - 1) * limit; 
+    const endIndex = page * limit; 
+
     const productData = await Product.find({
       category: catName,
       is_delete: false,
     });
 
+    const productCount = productData.length;
+    const totalPages = Math.ceil(productCount / limit); 
+    const paginatedProducts = productData.slice(startIndex, endIndex);
+
     if (productData.length > 0) {
       res.render("shop-page", {
-        product: productData,
         session,
         category: categoryData,
+        product: paginatedProducts, 
+        currentPage: page,
+        totalPages: totalPages
       });
     } else {
-      res.render("shop-page", { product: [], session, category: categoryData });
+      res.render("shop-page", { product: [], session, category: categoryData , product: paginatedProducts,  currentPage: page, totalPages: totalPages });
     }
   } catch (error) {
     console.log(error.message);
@@ -483,23 +510,35 @@ const searchProducts = async (req, res) => {
   try {
     const search = req.body.search;
     const session = req.session.user_id;
-
     const categories = await category.find({ is_delete: false });
 
     const productData = await Product.find({
       productname: { $regex: search, $options: "i" },
     });
+
+    const page = parseInt(req.query.page) || 1; 
+    const limit = 4;
+    const startIndex = (page - 1) * limit; 
+    const endIndex = page * limit;  
+    const productCount = productData.length;
+    const totalPages = Math.ceil(productCount / limit); 
+    const paginatedProducts = productData.slice(startIndex, endIndex);
+
     if (productData.length > 0) {
       res.render("shop-page", {
         session,
         category: categories,
-        product: productData,
+        product: paginatedProducts, 
+        currentPage: page,
+        totalPages: totalPages
       });
     } else {
       res.render("shop-page", {
         session,
         category: categories,
-        product: productData,
+        product: paginatedProducts, 
+        currentPage: page,
+        totalPages: totalPages
       });
     }
   } catch (error) {
@@ -515,6 +554,10 @@ const priceSort = async(req,res,next) =>{
     const categoryData = await category.find({ is_delete: false });
     const session = req.session.user_id;
     const products = await Product.find({ is_delete: false });
+    const page = parseInt(req.query.page) || 1; 
+    const limit = 4; 
+    const startIndex = (page - 1) * limit; 
+    const endIndex = page * limit; 
      
   const discountedProducts = products.map(product => {
   const discountPrice = product.price - (product.price * product.discountPercentage / 100);
@@ -523,10 +566,15 @@ const priceSort = async(req,res,next) =>{
 if(id == 1){
 const sortedData = discountedProducts.sort((a, b) => a.discountedPrice - b.discountedPrice);
    if(sortedData){
+    const productCount = sortedData.length;
+    const totalPages = Math.ceil(productCount / limit); 
+    const paginatedProducts = sortedData.slice(startIndex, endIndex);
   res.render("shop-page", {
-    product: sortedData,
     session,
     category: categoryData,
+    product: paginatedProducts, 
+    currentPage: page,
+    totalPages: totalPages
     });  
   }else{
     res.render("shop-page", { product: [], session, category: categoryData });
@@ -535,10 +583,15 @@ const sortedData = discountedProducts.sort((a, b) => a.discountedPrice - b.disco
 }else{
   const sortedData = discountedProducts.sort((a, b) =>  b.discountedPrice - a.discountedPrice);
   if(sortedData){
+    const productCount = sortedData.length;
+    const totalPages = Math.ceil(productCount / limit); 
+    const paginatedProducts = sortedData.slice(startIndex, endIndex);
     res.render("shop-page", {
-      product: sortedData,
       session,
       category: categoryData,
+      product: paginatedProducts, 
+      currentPage: page,
+      totalPages: totalPages
     });
   }else{
       res.render("shop-page", { product: [], session, category: categoryData });
