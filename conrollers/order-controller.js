@@ -300,8 +300,8 @@ const loadOrderManagement = async(req,res) =>{
         { new: true }
       );
       if(statusChange === 'Delivered'){
-        const expiryDateTimestamp = new Date().getTime() + (7 * 24 * 60 * 60 * 1000);
-        const expiryDate = new Date(expiryDateTimestamp);
+
+        const deliveredDate = new Date();
 
         await Order.findOneAndUpdate(
           {
@@ -310,7 +310,7 @@ const loadOrderManagement = async(req,res) =>{
           },
           {
             $set: {
-              'products.$.expiryDate': expiryDate
+              'products.$.deliveredDate': deliveredDate
             },
           },
           {

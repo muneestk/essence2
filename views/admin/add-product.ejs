@@ -6,6 +6,14 @@
         <div class="card pt-5">
           <div class="card-body">
             <h4 class="card-title">Add Products</h4>
+            <span>
+              <% if(typeof message !=='undefined' ){ %>
+                <p style="text-align: center;color: rgb(207, 28, 28);">
+                  <%= message %>
+                </p>
+
+                <% } %>
+            </span>
             <form class="forms-sample" method="post" action="/admin/insert-products" enctype="multipart/form-data">
               <div class="form-group">
                 <label for="exampleInputName1">Product Name</label>
@@ -14,23 +22,23 @@
               <div class="form-group">
                 <label for="exampleInputEmail3">Brand</label>
                 <!-- <input type="text" class="form-control" id="exampleInputEmail3" name="brand" required> -->
-                <select name="brand" class="form-control" id="exampleInputEmail3"  required>
+                <select name="brand" class="form-control" id="exampleInputEmail3" required>
                   <option>ZARA</option>
                   <option>LP</option>
                   <option>US POLO</option>
                   <option>NELLY</option>
                   <option>ROADSTER</option>
-              </select>
+                </select>
               </div>
               <div class="form-group">
                 <label for="exampleInputEmail3">Size</label>
                 <!-- <input type="text" class="form-control" id="exampleInputEmail3" name="size" required> -->
-                <select name="size" class="form-control" id="exampleInputEmail3"  required>
-                    <option>M</option>
-                    <option>S</option>
-                    <option>L</option>
-                    <option>XL</option>
-                    <option>XXL</option>
+                <select name="size" class="form-control" id="exampleInputEmail3" required>
+                  <option>M</option>
+                  <option>S</option>
+                  <option>L</option>
+                  <option>XL</option>
+                  <option>XXL</option>
                 </select>
               </div>
 
@@ -56,26 +64,17 @@
                 </div>
                 <div class="form-group">
                   <label for="exampleInputCity1">Quantity</label>
-                  <input type="text" class="form-control" id="exampleInputCity1" name="quantity" required>
+                  <input type="number" class="form-control" id="exampleInputCity1" name="quantity" required>
                 </div>
                 <div class="form-group">
                   <label for="exampleInputEmail3">Price</label>
-                  <input type="text" class="form-control" id="exampleInputEmail3" name="price" required>
+                  <input type="number" class="form-control" id="exampleInputEmail3" name="price" required>
                 </div>
                 <div class="form-group">
                   <label for="exampleTextarea1">Discription</label>
                   <textarea class="form-control" id="exampleTextarea1" rows="4" name="description" required></textarea>
                 </div>
-                <span>
-                  <% if(typeof message !=='undefined' ){ %>
-                    <p style="text-align: center;color: rgb(235, 229, 229);">
-                      <%= message %>
-                    </p>
 
-
-
-                    <% } %>
-                </span>
                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
                 <button class="btn btn-dark">Cancel</button>
             </form>

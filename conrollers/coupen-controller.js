@@ -18,6 +18,35 @@ const loadCoupenController = async(req,res,next)=>{
 
 const insertCoupen = async(req,res,next) =>{
     try {
+        
+        const adminData = await User.findById({ _id: req.session.Auser_id });
+        const coupenData = await Coupen.find()
+
+        //exist code in coupon checking
+
+        const existCode = await Coupen.findOne({code:req.body.code})
+        if(existCode){
+           return res.render('coupen-list',{ admin:adminData , coupen:coupenData , message:'coupon code already used'})
+        }
+
+        //discount pecentage validation
+
+        if(req.body.percentage < 0){
+            return res.render('coupen-list',{ admin:adminData , coupen:coupenData , message:'negative not allowed'})
+        }else if(req.body.percentage > 80){
+            return res.render('coupen-list',{ admin:adminData , coupen:coupenData , message:'maximum discount is 80 !!!'})
+
+        }
+
+        // date validation 
+
+        const startDate = new Date(req.body.startdate);
+        const endDate = new Date(req.body.expirydate);
+
+        if (isNaN(startDate) || startDate < new Date() || isNaN(endDate) || endDate <  new Date() ) {
+          return res.render('coupen-list', { admin: adminData, coupen: coupenData, message: 'Invalid date' });
+        }
+        
         const coupen = new Coupen({
             code:req.body.code.trim(),
             discountType:req.body.discount.trim(),
@@ -26,8 +55,8 @@ const insertCoupen = async(req,res,next) =>{
             discountPercentage:req.body.percentage.trim(),
         })
 
-        const coupenData = await coupen.save()
-        if(coupenData){
+        const coupenDatas = await coupen.save()
+        if(coupenDatas){
             res.redirect('/admin/coupen-list')
         }else{
             res.redirect('/admin/coupen-list')
@@ -42,7 +71,29 @@ const insertCoupen = async(req,res,next) =>{
 const updateCoupen = async(req,res,next)=>{
     try {
         const id = req.params.id
-        console.log(id);
+        const adminData = await User.findById({ _id: req.session.Auser_id });
+        const coupenData = await Coupen.find()
+
+ 
+         //discount pecentage validation
+ 
+         if(req.body.percentage < 0){
+             return res.render('coupen-list',{ admin:adminData , coupen:coupenData , message:'negative not allowed'})
+         }else if(req.body.percentage > 80){
+             return res.render('coupen-list',{ admin:adminData , coupen:coupenData , message:'maximum discount is 80 !!!'})
+ 
+         }
+ 
+         // date validation 
+ 
+         const startDate = new Date(req.body.startdate);
+         const endDate = new Date(req.body.expirydate);
+ 
+         if (isNaN(startDate) || startDate < new Date() || isNaN(endDate) || endDate <  new Date() ) {
+           return res.render('coupen-list', { admin: adminData, coupen: coupenData, message: 'Invalid date' });
+         }
+
+
         const updateCoupen = await Coupen.findOneAndUpdate({_id:id},{
             $set:{
                 code:req.body.code.trim(),
@@ -85,7 +136,6 @@ const applyCoupen = async(req,res,next)=>{
     try {
       const code = req.body.code;
       const amount = Number(req.body.amount)
-      console.log(amount+"=="+code);
       const userExist = await Coupen.findOne({code:code,user:{$in:[req.session.user_id]}})
       if(userExist){
         res.json({user:true})
@@ -98,7 +148,6 @@ const applyCoupen = async(req,res,next)=>{
                 await Coupen.findOneAndUpdate({_id:coupendata._id},{$push:{user:req.session.user_id}}) 
                 const perAmount = Math.round((amount * coupendata.discountPercentage)/100 )
                 const disTotal =Math.round(amount - perAmount)
-                console.log(disTotal+"==="+perAmount);
                 return res.json({amountOkey:true,disAmount:perAmount,disTotal})
             }
         }
@@ -116,6 +165,17 @@ const addOffer = async(req,res,next)=>{
         const proId = req.body.proId
         const percentage = req.body.percentage
         const name = req.body.name
+        const productDatas = await Product.find({is_delete:false});
+
+         //discount pecentage validation
+ 
+         if(percentage < 0){
+            return res.render('product-list',{ admin:adminData , product:productDatas , message:'negative not allowed'})
+        }else if(percentage > 80){
+            return res.render('product-list',{ admin:adminData , product:productDatas , message:'maximum discount is 80 !!!'})
+
+        }
+
         const updateProduct = await Product.findOneAndUpdate(
             { _id: proId },
             {

@@ -9617,7 +9617,7 @@ fieldset:disabled .wizard > .actions a,
   color: #ffab00;
   border-color: #ffab00; }
   .btn-outline-warning:hover {
-    color: #212529;
+    color: hwb(209 60% 27%);
     background-color: #ffab00;
     border-color: #ffab00; }
   .btn-outline-warning:focus, .btn-outline-warning.focus {
@@ -9927,7 +9927,7 @@ input[type="button"].btn-block {
   background-color: transparent;
   border: 0; }
   .dropdown-item:hover, .dropdown-item:focus {
-    color: #16181b;
+    color: #ffffff;
     text-decoration: none;
     background-color: #13151b; }
   .dropdown-item.active, .dropdown-item:active {
@@ -16928,7 +16928,9 @@ code {
   font-weight: normal;
   font-size: 0.875rem;
   padding: 0.625rem 0.6875rem;
+
   background-color: #b4b4b4;
+  
   border-radius: 2px;
   color: #000000; }
   .form-control:focus, .asColorPicker-input:focus, .dataTables_wrapper select:focus, .jsgrid .jsgrid-table .jsgrid-filter-row input:focus[type=text],
@@ -21133,3 +21135,60 @@ div.tagsinput {
   flex-grow: 1; }
 
 /*# sourceMappingURL=maps/style.css.map */
+
+
+
+
+
+/* externaly added */
+
+	
+			/* body{
+				background:#eee;
+			} */
+			
+			.card1 {
+			  width: 150px;
+			  padding: 10px;
+			  border-radius: 20px;
+			  background: orange;
+			  border: none;
+			  color: #fff;
+			  height: 150px;
+			  display: flex;
+        flex-direction: column;
+			  position: relative;
+			  align-items: center;
+			  justify-content: center;
+			}
+			
+			.container1 {
+			  height: 100vh;
+			}
+			
+			.card1 h1 {
+			  font-size: 10px;
+			  margin-bottom: 0px;
+			}
+			
+			.card1 span {
+			  font-size: 10px;
+			}
+			
+			.image1 {
+			  position: absolute;
+			  opacity: .3;
+			  left: 0;
+			  top: 0;
+			}
+			
+			.image21 {
+			  position: absolute;
+			  bottom: 0;
+			  right: 0;
+			  opacity: .3;
+			}
+      .card1 small {
+        font-size: 10px;
+      }
+     

@@ -24,13 +24,12 @@ admin_route.get("/users-list", Auth.isLogin, adminController.loadUsers);
 admin_route.post("/",adminController.verifyLogin);
 admin_route.get('/block-user',Auth.isLogin,adminController.block);
 admin_route.get('/unblock-user',Auth.isLogin,adminController.unblock);
+admin_route.get('/sales-sort/:id',Auth.isLogin,adminController.salesSort);
 admin_route.post("/",adminController.verifyLogin);
 
 //category controller
 
 admin_route.get('/category-list',Auth.isLogin,categoryController.categoryList);
-admin_route.get('/category-list',Auth.isLogin,categoryController.categoryList);
-admin_route.get('/edit-category',Auth.isLogin,categoryController.editCatogary);
 admin_route.get('/delete-category',Auth.isLogin,categoryController.deletecategory);
 admin_route.post('/edit-category',categoryController.saveCatogary);
 admin_route.post('/insert-category',categoryController.insertCategory);

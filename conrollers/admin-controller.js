@@ -79,12 +79,53 @@ const loadSalesReport = async(req,res) =>{
   }
 }
 
+//sort sales report
+
+const salesSort = async(req,res) =>{
+  try {
+    const adminData = await User.findById({ _id: req.session.Auser_id });
+    const id = parseInt(req.params.id);
+    const from = new Date();
+    const to = new Date(from.getTime() - id * 24 * 60 * 60 * 1000);
+    
+    const order = await Order.aggregate([
+      { $unwind: "$products" },
+      {$match: {
+        'products.status': 'Delivered',
+        $and: [
+          { 'products.deliveredDate': { $gt: to } },
+          { 'products.deliveredDate': { $lt: from } }
+        ]
+      }},
+      { $sort: { date: -1 } },
+      {
+        $lookup: {
+          from: 'products',
+          let: { productId: { $toObjectId: '$products.productid' } },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$_id', '$$productId'] } } }
+          ],
+          as: 'products.productDetails'
+        }
+      },  
+      {
+        $addFields: {
+          'products.productDetails': { $arrayElemAt: ['$products.productDetails', 0] }
+        }
+      }
+    ]);
+
+    res.render("sales-report", { order ,admin:adminData });
+   
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 
 
 
 
 //loading dashboard
-
 
 const loadDashboard = async (req, res ,next) => {
   try {
@@ -114,7 +155,12 @@ const loadDashboard = async (req, res ,next) => {
         }
       }
     ]);
-    const total = result[0].total;
+
+    let total = 0;
+      if (result.length > 0) {
+        total = result[0].total;
+    } 
+   
 
     //total cod sale
 
@@ -230,5 +276,6 @@ const logout = async (req, res) => {
     loadUsers,
     block,unblock,
     loadSalesReport,
+    salesSort
 
   }

@@ -43,7 +43,6 @@ const product=mongoose.Schema({
     },
     discountPercentage:{
         type:Number,
-        default:0
     },
     discountName:{
         type:String,

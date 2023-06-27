@@ -40,7 +40,7 @@ user_route.post('/search-products', userController.searchProducts);
 //cart controller
 
 user_route.get('/checkout-page',auth.isLogin,cartController.loadChekout)
-user_route.get('/empty-checkout',auth.isLogin,cartController.loademptyCheckout)
+// user_route.get('/empty-checkout',auth.isLogin,cartController.loademptyCheckout)
 user_route.get('/cart-page',auth.isLogin,auth.blocked,cartController.loadCart)
 user_route.post('/delete-Cart-product',cartController.deleteCartProduct)
 user_route.post('/addtocart',auth.isLogin,auth.blocked,cartController.addToCart)

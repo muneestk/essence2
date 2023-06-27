@@ -4,9 +4,18 @@
 
 <div class="card-body">
   <h3 class="card-title">Edit Product</h3>
+  
 
   <form action="" method="POST" class="form-group m-2 mt-5 pt-5" enctype="multipart/form-data">
     <label>PRODUCT</label>
+    <span>
+      <% if(typeof message !=='undefined' ){ %>
+        <p style="text-align: center;color: rgb(207, 28, 28);">
+          <%= message %>
+        </p>
+  
+        <% } %>
+    </span>
     <input type="name" class="form-control form-control-lg" name="productname" value="<%= product.productname %>"
       required>
     <br><br>

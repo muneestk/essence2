@@ -8,13 +8,36 @@ const fs = require('fs')
 
 const insertProducts = async (req, res) => {
   try {
-    const images = [];
+    
+    const catData = await category.find();
+    const adminData = await User.findById({ _id: req.session.Auser_id });
 
+
+    const images = [];
     if (req.files && req.files.length > 0) {
       for (let i = 0; i < req.files.length; i++) {
+        console.log(req.files[i].filename);
         images[i] = req.files[i].filename;
       }
     }
+
+    //--product quantity and price checking--//
+
+    if(req.body.quantity < 0 ||  req.body.price < 0 ){
+     return res.render("add-product", { admin: adminData, category: catData  ,message:'negetive not allowed'});
+  
+    }
+
+    //white spsce checking
+    if (
+      req.body.productname.trim() === "" ||
+      req.body.description.trim() === "" ||
+      req.body.quantity.trim() === "" ||
+      req.body.price.trim() === ""
+    ) {
+      return res.render("add-product", { admin: adminData, category: catData  ,message:'All field are required'})
+    }
+
 
     const product = new Product({
       productname: req.body.productname.trim(),
@@ -119,47 +142,53 @@ const removeImg = async (req, res) => {
 //for saving edited data in product
 
 const saveProduct = async (req, res) => {
-  if (
-    req.body.productname.trim() === "" ||
-    req.body.category.trim() === "" ||
-    req.body.description.trim() === "" ||
-    req.body.quantity.trim() === "" ||
-    req.body.price.trim() === ""
-  ) {
-    const id = req.params.id;
-    const productData = await Product.findById(id).populate('category');
-    const categoryData = await category.find();
-    const adminData = await User.findById(req.session.Auser_id);
-
-    res.render("edit-product", {
-      admin: adminData,
-      product: productData,
-      message: "All fields required",
-      category: categoryData
-    });
-  } else {
     try {
       const id = req.params.id;
-      const images = req.files.map(file => file.filename);
-
-      await Product.findByIdAndUpdate(id, {
-        productname: req.body.productname,
-        brand: req.body.brand,
-        price: req.body.price,
-        category: req.body.category,
-        quantity: req.body.quantity,
-        description: req.body.description,
-        discountPercentage:req.body.percentage,
-        discountName:req.body.discountname,
-        $addToSet: { image: { $each: images } }
-      });
+      const productData = await Product.findById(id).populate('category');
+      const categoryData = await category.find();
       const adminData = await User.findById(req.session.Auser_id);
-      res.redirect('/admin/products-list');
+
+      //white space checking
+
+      if (req.body.productname.trim() === ""|| req.body.discountname.trim() === ""   || req.body.description.trim() === "" || req.body.quantity.trim() === "" || req.body.price.trim() === "") 
+      {
+       return res.render("edit-product", {
+          admin: adminData,
+          product: productData,
+          message: "All fields required",
+          category: categoryData
+        });
+      }
+
+       //--product quantity and price checking and product discount percentage chekking--//
+
+     if(req.body.quantity < 0 ||  req.body.price < 0  || req.body.percentage < 0 ){
+      return res.render("edit-product", { product: productData, admin: adminData, category: categoryData  ,message:'negetive not allowed'});
+     }else if(req.body.percentage >= 80 ){
+      return res.render("edit-product", { product: productData, admin: adminData, category: categoryData  ,message:'maximum discount is 80 !!!'});
+     }
+
+     const images = req.files.map(file => file.filename);
+
+     await Product.findByIdAndUpdate(id, {
+       productname: req.body.productname,
+       brand: req.body.brand,
+       price: req.body.price,
+       category: req.body.category,
+       quantity: req.body.quantity,
+       description: req.body.description,
+       discountPercentage:req.body.percentage,
+       discountName:req.body.discountname,
+       $addToSet: { image: { $each: images } }
+     });
+
+     res.redirect('/admin/products-list');
+
     } catch (error) {
       console.log(error.message);
     }
   }
-};
+
 
 //for update images in edit
 

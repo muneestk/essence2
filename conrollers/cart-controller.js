@@ -237,13 +237,13 @@ const deleteCartProduct = async (req, res) => {
 
 //loading empty checkout -page
 
-const loademptyCheckout = async(req,res) =>{
-  try {
-    res.render('empty-checkout')
-  } catch (error) {
-    console.log(error.message);
-  }
-}
+// const loademptyCheckout = async(req,res) =>{
+//   try {
+//     res.render('empty-checkout')
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// }
 
 //loading checkoutpage
 
@@ -278,7 +278,7 @@ const loadChekout = async(req,res)=>{
             res.render('empty-checkout',{session,Total})
           }
         }else{
-          res.render('empty-checkout',{session,Total,totalAmount,coupen});
+          res.render('empty-checkout',{session,Total});
         }
       }else{
         res.redirect('/')
@@ -295,7 +295,7 @@ module.exports = {
                   changeProductCount ,
                   deleteCartProduct,
                   loadChekout,
-                  loademptyCheckout
+                  // loademptyCheckout
                 
               };
 

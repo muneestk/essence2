@@ -18,8 +18,27 @@ const categoryList = async (req,res)=>{
  //  updating and saving the catagory 
 const  saveCatogary= async (req,res)=>{
     try {
-        const name = uc.upperCase(req.body.categorynames);
-       const catDATA = await category.findOneAndUpdate({_id:req.query.id},{$set:{categoryname:name}});
+
+       const name = uc.upperCase(req.body.categoryname)
+       const catagoryDatas = await category.find({is_delete:false})
+       const adminData = await User.findById({ _id: req.session.Auser_id });
+
+        //white space checking
+
+        if(name.trim().length==0){  
+            return res.render('category-list',{message:"Invalid typing",admin:adminData, category:catagoryDatas});
+        }
+
+        //allreday exist checking
+
+        const catData = await category.findOne({categoryname:name});
+            
+        if(catData){
+            return res.render('category-list',{message:"This category is already exist",admin:adminData,category:catagoryDatas});
+        }
+
+
+       const catDATA = await category.findOneAndUpdate({_id:req.body.id},{$set:{categoryname:name}});
        if(catDATA){
         res.redirect('/admin/category-list')
        }
@@ -31,40 +50,39 @@ const  saveCatogary= async (req,res)=>{
 
 
 //  Adding the catagory
+
 const insertCategory = async (req,res)=>{
     try
      {
-        if(req.session.Auser_id){
-          
-            const catName = uc.upperCase(req.body.categoryname);
-             const Category = new category({
-                categoryname:catName
-            })
-            if(catName.trim().length==0){
-                const catagoryDatas = await category.find({is_delete:false})
-                const adminData = await User.findById({ _id: req.session.Auser_id });
-                res.render('category-list',{message:"Invalid typing",admin:adminData, category:catagoryDatas});
-            }else{
-                const catData = await category.findOne({categoryname:catName});
-                await category.updateOne({categoryname:catName},{$set:{is_delete:false}});
-            
-                if(catData){
-                    const adminData = await User.findById({ _id: req.session.Auser_id });
-                     const catagoryDatas = await category.find({is_delete:false})
-                    res.render('category-list',{message:"This category is already exist",admin:adminData,category:catagoryDatas});
-                }else{
-                    const categoryData = await Category.save();
-                    if(categoryData){
-                        const catagoryDatas = await category.find({is_delete:false})
-                        const adminData = await User.findById({ _id: req.session.Auser_id });
-                        res.render('category-list',{admin:adminData, category:catagoryDatas});
-                    }else{
-                        res.redirect('/admin/dashboard');
-                    }
-                }
-            }
+        const catagoryDatas = await category.find({is_delete:false})
+        const adminData = await User.findById({ _id: req.session.Auser_id });
+        const catName = uc.upperCase(req.body.categoryname);
+
+        //white space checking
+
+        if(catName.trim().length==0){  
+            return res.render('category-list',{message:"Invalid typing",admin:adminData, category:catagoryDatas});
+        }
+
+        //allreday exist checking
+
+        const catData = await category.findOne({categoryname:catName});            
+        if(catData){
+            await category.updateOne({categoryname:catName},{$set:{is_delete:false}});
+            return res.render('category-list',{message:"This category is already exist",admin:adminData,category:catagoryDatas});
+        }
+
+        //add new category
+
+        const Category = new category({
+            categoryname:catName
+        })
+        const categoryData = await Category.save();
+        if(categoryData){
+            res.redirect('/admin/category-list');
         }else{
-            res.redirect('/admin')
+            res.render('category-list',{admin:adminData, category:catagoryDatas,message:'something error'});
+           
         }
     } catch (error) {
         console.log(error.message);
@@ -72,6 +90,7 @@ const insertCategory = async (req,res)=>{
  }
 
 //  delete the catagory 
+
  const deletecategory = async (req,res)=>{
     try {
        const id = req.query.id   
@@ -83,17 +102,21 @@ const insertCategory = async (req,res)=>{
     }
 }
 
-//  Editing the catagory 
-const  editCatogary= async (req,res)=>{
+
+//load banner page on admin side
+
+const banneerList = async (req,res)=>{
     try {
-        const id = req.query.id;
-       const catDATA = await category.findById({_id:id});
-       const adminData = await User.findById({ _id: req.session.Auser_id });
-       res.render('edit-category',{category:catDATA , admin:adminData})
+        const adminData = await User.findById({ _id: req.session.Auser_id });
+        const catData = await category.find({is_delete:false})
+        res.render('bannner-list',{category:catData,admin:adminData})
     } catch (error) {
-        console.log(error.message);
+       console.log(error.message); 
     }
 }
+
+
+
 
 
 
@@ -102,5 +125,5 @@ module.exports={
     saveCatogary,
     insertCategory,
     deletecategory,
-    editCatogary
+    banneerList,
 }
