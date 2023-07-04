@@ -20055,7 +20055,7 @@ button.btn-close.qty_close {
 }
 .ec-product-inner .ec-pro-content .ec-pro-title a {
   text-decoration: none;
-  color: #777;
+  color: #000;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -21917,7 +21917,7 @@ select::-ms-expand {
 .ec-sidebar-wrap .ec-sidebar-block .ec-sb-block-content li a {
   margin-left: 30px;
   display: block;
-  color: #777;
+  color: #000;
   font-size: 14px;
   margin-top: 0;
   line-height: 20px;
@@ -31944,7 +31944,7 @@ input[type=email]:focus::-webkit-input-placeholder {
 .ec-vendor-dashboard .ec-vendor-sidebar .ec-sidebar-block .ec-vendor-block .ec-vendor-block-items ul li a, .ec-vendor-uploads .ec-vendor-sidebar .ec-sidebar-block .ec-vendor-block .ec-vendor-block-items ul li a {
   width: 100%;
   display: block;
-  color: #777;
+  color: #000;
   font-weight: 500;
 }
 .ec-vendor-dashboard .ec-vendor-sidebar .ec-sidebar-block .ec-vendor-block .ec-vendor-block-items ul li:first-child, .ec-vendor-uploads .ec-vendor-sidebar .ec-sidebar-block .ec-vendor-block .ec-vendor-block-items ul li:first-child {
@@ -41813,7 +41813,7 @@ body {
     right: 0;
     bottom: 0;
     content: '';
-    background: #000;
+    background: #e9ecef;
     opacity: .3;
     z-index: -1; }
 

@@ -3,6 +3,10 @@ const User = require("../models/user-models");
 const Product = require("../models/product-model");
 const Order = require('../models/order-modal')
 const razorpay = require('razorpay')
+const puppeteer = require('puppeteer')
+const fs = require('fs')
+const path = require('path')
+const ejs = require('ejs')
 
 //instance creating for razorpay
 
@@ -342,6 +346,43 @@ const loadOrderManagement = async(req,res) =>{
       console.log(error.message);
     }
   }
+
+  //invoice downloading in user side
+
+  const loadInvoice = async (req, res) => {
+    try {
+      const id = req.params.id;
+      const session = req.session.user_id;
+      const userData = await User.findById({_id:session})
+      const orderData = await Order.findOne({_id:id}).populate('products.productid');
+      const date = new Date()
+     
+       data = {
+        order:orderData,
+        user:userData,
+        date,
+      }
+  
+      const filepathName = path.resolve(__dirname, '../views/users/invoice.ejs');
+      const html = fs.readFileSync(filepathName).toString();
+      const ejsData = ejs.render(html, data);
+      
+      const browser = await puppeteer.launch({ headless: 'new' });
+      const page = await browser.newPage();
+      await page.setContent(ejsData, { waitUntil: 'networkidle0' });
+      const pdfBytes = await page.pdf({ format: 'Letter' });
+      await browser.close();
+  
+     
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename= order invoice.pdf');
+      res.send(pdfBytes);
+  
+    } catch (err) {
+      console.log(err);
+      res.status(500).send('An error occurred');
+   }
+  };
   
 
 
@@ -356,5 +397,6 @@ const loadOrderManagement = async(req,res) =>{
         changeStatus,
         orderCancel,
         loadOrderSuccess,
-        orderReturn
+        orderReturn,
+        loadInvoice
     }

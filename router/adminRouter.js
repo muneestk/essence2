@@ -27,12 +27,18 @@ admin_route.get('/unblock-user',Auth.isLogin,adminController.unblock);
 admin_route.get('/sales-sort/:id',Auth.isLogin,adminController.salesSort);
 admin_route.post("/",adminController.verifyLogin);
 
-//category controller
+//category controller   
 
 admin_route.get('/category-list',Auth.isLogin,categoryController.categoryList);
 admin_route.get('/delete-category',Auth.isLogin,categoryController.deletecategory);
 admin_route.post('/edit-category',categoryController.saveCatogary);
 admin_route.post('/insert-category',categoryController.insertCategory);
+
+//bannner in category controller
+
+admin_route.get('/banner-list',Auth.isLogin,categoryController.bannerList)
+admin_route.post('/insert-banner',update.upload.single('image'),categoryController.saveBanner)
+admin_route.post('/edit-banner',update.upload.single('image'),categoryController.updateBanner)
 
 //product controller
 

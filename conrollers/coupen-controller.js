@@ -46,13 +46,19 @@ const insertCoupen = async(req,res,next) =>{
         if (isNaN(startDate) || startDate < new Date() || isNaN(endDate) || endDate <  new Date() ) {
           return res.render('coupen-list', { admin: adminData, coupen: coupenData, message: 'Invalid date' });
         }
+
+        //white space checking
+        
+        if(req.body.code.trim() == '' || req.body.discount.trim() == "" ){
+            return res.render('coupen-list', { admin: adminData, coupen: coupenData, message: 'Invalid input' });
+        }
         
         const coupen = new Coupen({
-            code:req.body.code.trim(),
-            discountType:req.body.discount.trim(),
+            code:req.body.code,
+            discountType:req.body.discount,
             startDate:req.body.startdate,
             expiryDate:req.body.expirydate,
-            discountPercentage:req.body.percentage.trim(),
+            discountPercentage:req.body.percentage
         })
 
         const coupenDatas = await coupen.save()

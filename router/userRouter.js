@@ -40,7 +40,6 @@ user_route.post('/search-products', userController.searchProducts);
 //cart controller
 
 user_route.get('/checkout-page',auth.isLogin,cartController.loadChekout)
-// user_route.get('/empty-checkout',auth.isLogin,cartController.loademptyCheckout)
 user_route.get('/cart-page',auth.isLogin,auth.blocked,cartController.loadCart)
 user_route.post('/delete-Cart-product',cartController.deleteCartProduct)
 user_route.post('/addtocart',auth.isLogin,auth.blocked,cartController.addToCart)
@@ -63,6 +62,7 @@ user_route.post('/addtoWishlist',wishlistController.addToWishlist)
 
 //order controller
 
+user_route.get('/invoice-download/:id',auth.isLogin,orderController.loadInvoice)
 user_route.get('/my-orders',auth.isLogin,orderController.loadMyOrder)
 user_route.get('/single-order-page/:id',auth.isLogin,orderController.loadSingleOrder)
 user_route.get('/order-success/:id',auth.isLogin,orderController.loadOrderSuccess)

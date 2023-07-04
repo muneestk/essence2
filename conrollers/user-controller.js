@@ -5,6 +5,7 @@ const passwordValidator = require("password-validator");
 const Product = require("../models/product-model");
 const category = require("../models/catogory-model");
 const wishlist = require("../models/wishlist-model");
+const Banner = require("../models/banner-modal")
 let otp;
 
 //password scheema creating
@@ -443,11 +444,12 @@ const loadHome = async (req, res) => {
   try {
     const session = req.session.user_id;
     const productData = await Product.find({ is_delete: false });
-
+    const banners = await Banner.find()
     if (!session) {
       return res.render("home-page", {
         session: session,
         product: productData,
+        banners
       });
     }
 
@@ -455,12 +457,12 @@ const loadHome = async (req, res) => {
     if (userData) {
       return res.render("home-page", {
         user: userData,
-        session,
+        session,banners,
         product: productData,
       });
     } else {
       const session = null;
-      return res.render("home-page", { session, product: productData });
+      return res.render("home-page", { session,banners, product: productData });
     }
   } catch (error) {
     console.log(error.message);

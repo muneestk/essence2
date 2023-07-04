@@ -16,7 +16,6 @@ const insertProducts = async (req, res) => {
     const images = [];
     if (req.files && req.files.length > 0) {
       for (let i = 0; i < req.files.length; i++) {
-        console.log(req.files[i].filename);
         images[i] = req.files[i].filename;
       }
     }
@@ -25,7 +24,6 @@ const insertProducts = async (req, res) => {
 
     if(req.body.quantity < 0 ||  req.body.price < 0 ){
      return res.render("add-product", { admin: adminData, category: catData  ,message:'negetive not allowed'});
-  
     }
 
     //white spsce checking

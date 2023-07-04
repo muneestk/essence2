@@ -1,0 +1,152 @@
+<%- include('../adminlayout/header.ejs') %>
+<%- include('../adminlayout/sidebar.ejs') %>
+<%- include('../adminlayout/navbar.ejs') %>
+
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="card-body">
+        <h4 class="card-title">BANNER LIST</h4>
+        <span>
+          <% if(typeof message !== 'undefined'){ %>
+            <p style="text-align: center; color: red;">
+              <%= message %>
+            </p>
+          <% } %>
+        </span>
+        <div class="d-flex justify-content-center">
+          <a type="button" class="btn btn-secondary w-60" style="margin-top: 80px; margin-left: 10px;"
+            data-bs-toggle="modal" data-bs-target="#addbanner">
+            <i title="Add Category" class="fa fa-plus"></i> ADD BANNER
+          </a>
+        </div>
+
+         <!-- add banner modal -->
+         <div class="modal fade" id="addbanner" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title fs-5" id="exampleModalLabel">ADD BANNER</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form class="forms-sample" method="post" action="/admin/insert-banner" id="form" enctype="multipart/form-data">
+                  <div class="form-group">
+                    <label for="exampleInputName1">Text</label>
+                    <input type="text" class="form-control"  id="text" placeholder="Name" name="text">
+                    <span id="text-error" class="text-danger"></span>
+                  </div>
+                  <label>Image upload</label>
+                  <div class="form-group">
+                    <label>File upload</label>
+                    <input class="bt" style="height: 28px;width: 228px ; background-color: gray;color: white;" accept="image/*" type="file" name="image" id="image-validate">
+                    <br><span id="image-error" class="text-danger"></span>
+                  </div>
+                  <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Text</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% banners.forEach(banner => { %>
+               
+               <tr>
+              <td><img src="/adminAssets/adminImages/<%= banner.image %>" style="width: 10vw !important; height: 10vh !important; border-radius: 0 ;" alt=""></td>
+              <td><%= banner.text %></td>
+              <td> <a type="button" class="btn btn-secondary " 
+                data-bs-toggle="modal" data-bs-target="#editbanner<%= banner._id %>">
+                <i title="Add Category" class="fa fa-plus"></i> Edit
+              </a></td>
+              </tr>
+
+
+               <!-- edit banner modal -->
+         <div class="modal fade" id="editbanner<%= banner._id %>" tabindex="-1" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+         <div class="modal-dialog">
+           <div class="modal-content">
+             <div class="modal-header">
+               <h4 class="modal-title fs-5" id="exampleModalLabel">EDIT BANNER</h4>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+             </div>
+             <div class="modal-body">
+               <form class="forms-sample" method="post"  action="/admin/edit-banner" enctype="multipart/form-data">
+                 <div class="form-group">
+                   <label for="exampleInputName1">Text</label>
+                   <input type="text" class="form-control" id="text1" value="<%= banner.text %>"
+                     name="text">
+                     <span id="text-error" class="text-danger"></span>
+                     <input type="hidden" value="<%= banner._id %>" name="id">
+                     <input type="hidden" value="<%= banner.image %>" name="img">
+                 </div>
+                 <label><img src="/adminAssets/adminImages/<%= banner.image %>" width="150vw" height="100vh" alt=""></label>
+                <div class="form-group">
+                  <label>change image</label>
+                  <input class="bt" id="image-validate1" style="height: 28px;width: 228px ; background-color: gray;color: white;"
+                    accept="Image/*" type="file" name="image" >
+                </div>
+
+                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
+               </form>
+             </div>
+           </div>
+         </div>
+       </div> 
+
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const imageValue = document.getElementById('image-validate');
+  const form = document.getElementById('form');
+  const imageError = document.getElementById('image-error');
+  const textValue = document.getElementById('text')
+  const textError = document.getElementById('text-error')
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+   const text = textValue.value.trim()
+   if(!text){
+    textError.textContent = 'Please write heading';
+    return
+   }else if(!isNaN(text)){
+    textError.textContent = 'Please write only text';
+    return
+   }else{
+    textError.textContent = '';
+   }
+
+    const image = imageValue.files[0];
+    if (!image) {
+      imageError.textContent = 'Please select an image';
+      return;
+    } else {
+      const allowedExtensions = /\.(jpg|jpeg|png|gif)$/i;
+      if (!allowedExtensions.test(image.name)) {
+        imageError.textContent = "Invalid image file format";
+        return;
+      }
+      imageError.textContent = "";
+      form.submit();
+    }
+  });
+
+
+</script>
+<%- include('../adminlayout/footer.ejs') %>
