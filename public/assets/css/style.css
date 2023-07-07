@@ -41891,7 +41891,7 @@ h1, h2, h3, h4, h5,
   background: transparent;
   border: none;
   height: 50px;
-  color: white;
+  color: white !important;
   border: 1px solid transparent;
   background: rgba(255, 255, 255, 0.08);
   border-radius: 40px;

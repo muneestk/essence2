@@ -14,6 +14,8 @@ const loadCart = async (req, res) => {
     let cartData = await Cart.findOne({ userId: req.session.user_id }).populate(
       "products.productid"
     );
+    let Total = 0
+    const userId = userName._id;
     if (req.session.user_id) {
       if (cartData) {
         if (cartData.products.length > 0) {
@@ -30,23 +32,15 @@ const loadCart = async (req, res) => {
           ]);
         
 
-          const Total = total.length > 0 ? total[0].total : 0; 
-          const userId = userName._id;
+         Total = total.length > 0 ? total[0].total : 0; 
+     
           res.render("cart-page", { products: products, Total: Total, userId ,session});
         } else {
-          res.render("empty-cart-page", {
-            userName,
-            session,
-            message: "No Products Added to cart !",
-          });
+          res.render("cart-page", { products:[], Total: Total, userId ,session});
           return
         }
       } else {
-        res.render("empty-cart-page", {
-          userName,
-          session,
-          message: "No Products Added to cart",
-        });
+        res.render("cart-page", { products: [] , Total: Total, userId ,session});
         return
       }
     } else {
@@ -235,15 +229,6 @@ const deleteCartProduct = async (req, res) => {
   }
 };
 
-//loading empty checkout -page
-
-// const loademptyCheckout = async(req,res) =>{
-//   try {
-//     res.render('empty-checkout')
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// }
 
 //loading checkoutpage
 
@@ -271,14 +256,13 @@ const loadChekout = async(req,res)=>{
       if(addressData){
           if(addressData.addresses.length>0){
             const address = addressData.addresses
-            
             res.render('checkout-page',{session,Total,address,user:userData,coupen})
           }
           else{
-            res.render('empty-checkout',{session,Total})
+            res.render('checkout-page',{session,Total,address:[],user:userData,coupen})
           }
         }else{
-          res.render('empty-checkout',{session,Total});
+          res.render('checkout-page',{session,Total,address:[],user:userData,coupen});
         }
       }else{
         res.redirect('/')
@@ -295,8 +279,6 @@ module.exports = {
                   changeProductCount ,
                   deleteCartProduct,
                   loadChekout,
-                  // loademptyCheckout
-                
               };
 
 

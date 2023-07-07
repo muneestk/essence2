@@ -102,10 +102,8 @@
                 </div>
               </div>
               <% }) } else { %>
-                <div class="row">
-                  <p class="pl-5" style="color: red;">
-                    <%=message%>
-                  </p>
+                <div>
+                     <h1>Add your address</h1>
                 </div>
                 <% } %>
 
@@ -183,21 +181,31 @@
                                 <label for="pay1">Razor Pay</label>
                               </span>
                             </span>
+                            <% if (address !=0) { %>
                             <div>
                               <button type="submit" class="btn-primary">PLACE ORDER</button>
                             </div>
+                            <% }else{  %>
+                              <div>
+                                <button onclick="addadrress()" class="btn-primary">PLACE ORDER</button>
+                              </div>
+
+                           <% } %>
                       </form>
+                      <% if (address !=0) { %>
                       <div class="mt-5">
                         <span class="text-left">Coupon Discount</span>
                         <span class="text-right"><a class="ec-checkout-coupon">Apply Coupon</a></span>
                       </div>
+                      
                       <div class="ec-checkout-coupon-content mt-2">
                         <form>
-                          <input class="ec-coupon" type="text" placeholder="Enter Your Coupon Code" id="code">
+                          <input class="ec-coupon" type="text" placeholder="Enter Your Coupon Code" id="code" required>
                           <button class="ec-coupon-btn button btn-primary"
                              onclick="applycoupon($('#code').val())">Apply</button>
                         </form>
                       </div>
+                      <% } %>
                   </div>
                </div>
            </div>
@@ -209,7 +217,7 @@
     </section>
     <div class="container" style="background-color: #403f3f2c;">
       <div class="row">
-     <% if(coupen.length > 0) 
+     <% if(coupen.length > 0 && address !=0) 
      coupen.forEach(coupen => {  %>
       
 
@@ -264,6 +272,19 @@
     </div>
 
     <script>
+
+      //add address message
+
+      function addadrress(){
+        swal.fire({
+                  positon: 'center',
+                  icon: "error",
+                  title: 'Please add your address',
+                  showConfirmButton: false,
+                  showCancelButton: false,
+                  timer:1500
+                 })
+      }
 
       // copy code in clipboard
 
