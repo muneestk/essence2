@@ -3,14 +3,12 @@ dotenv.config()
 const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGOID);
 const path = require("path");
-const logger = require("morgan");
 const session = require("express-session");
 const nocache = require("nocache");
 
 const express = require("express");
 const app = express();
 
-// app.use(logger('tiny'));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

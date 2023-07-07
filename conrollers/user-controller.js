@@ -400,7 +400,7 @@ const sendVerifyMail = async (name, email, otp) => {
     });
 
     const mailOptions = {
-      from: "muneestk5017@gmail.com",
+      from: process.env.VERIFYEMAIL,
       to: email,
       subject: "Verification Email",
       html: `<p>Hi ${name}, please click <a href="http://localhost:3000/otp">here</a> to verify and enter your verification email. This is your OTP: ${otp}</p>`,
