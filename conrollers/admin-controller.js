@@ -123,6 +123,50 @@ const salesSort = async(req,res) =>{
 }
 
 
+// range sor in admin side
+
+
+const rangeSort = async(req,res) =>{
+  try {
+    const adminData = await User.findById({ _id: req.session.Auser_id });
+    const from = new Date(req.body.from)
+    const to = new Date(req.body.to) 
+    console.log(from+'==='+to);
+    const order = await Order.aggregate([
+      { $unwind: "$products" },
+      {$match: {
+        'products.status': 'Delivered',
+        $and: [
+          { 'products.deliveredDate': { $gt: from } },
+          { 'products.deliveredDate': { $lt: to } }
+        ]
+      }},
+      { $sort: { date: -1 } },
+      {
+        $lookup: {
+          from: 'products',
+          let: { productId: { $toObjectId: '$products.productid' } },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$_id', '$$productId'] } } }
+          ],
+          as: 'products.productDetails'
+        }
+      },  
+      {
+        $addFields: {
+          'products.productDetails': { $arrayElemAt: ['$products.productDetails', 0] }
+        }
+      }
+    ]);
+
+    res.render("sales-report", { order ,admin:adminData });
+   
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+
 
 
 //loading dashboard
@@ -276,6 +320,7 @@ const logout = async (req, res) => {
     loadUsers,
     block,unblock,
     loadSalesReport,
-    salesSort
+    salesSort,
+    rangeSort
 
   }

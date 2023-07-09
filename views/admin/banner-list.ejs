@@ -137,7 +137,7 @@
       imageError.textContent = 'Please select an image';
       return;
     } else {
-      const allowedExtensions = /\.(jpg|jpeg|png|gif)$/i;
+      const allowedExtensions = /\.(jpg|jpeg|png|gif|webp)$/i;
       if (!allowedExtensions.test(image.name)) {
         imageError.textContent = "Invalid image file format";
         return;

@@ -25,6 +25,7 @@ admin_route.post("/",adminController.verifyLogin);
 admin_route.get('/block-user',Auth.isLogin,adminController.block);
 admin_route.get('/unblock-user',Auth.isLogin,adminController.unblock);
 admin_route.get('/sales-sort/:id',Auth.isLogin,adminController.salesSort);
+admin_route.post('/range-sort',Auth.isLogin,adminController.rangeSort);
 admin_route.post("/",adminController.verifyLogin);
 
 //category controller   

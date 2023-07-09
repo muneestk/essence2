@@ -7,18 +7,34 @@
           <div class="card">
             <div class="card-body">
               <h4 class="card-title">Sales Report</h4>
-              <div class="d-flex justify-content-end">
+              <div class="d-flex justify-content-between">
                 <div class="dropdown">
                   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Sorting
                   </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <div class="dropdown-menu mx-3" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" href="/admin/sales-sort/<%= 1 %>">Daily</a>
                     <a class="dropdown-item" href="/admin/sales-sort/<%= 7 %>">Weekly</a>
                     <a class="dropdown-item" href="/admin/sales-sort/<%= 30 %>">Monthly</a>
                     <a class="dropdown-item" href="/admin/sales-report">All Reports</a>
                   </div>
                 </div>
+                
+                <div>
+                  <form action="/admin/range-sort" method="post">
+                    <h5>Date Range</h5>
+                    <div class="form-group">
+                      <input class="form-control" type="date" id="from" name="from">
+                    </div>
+                    <div class="form-group d-flex">
+                      <input class="form-control" type="date" id="to" name="to">
+                    </div>
+                    <div class="text-center">
+                      <button class="btn btn-outline-success" type="submit">Submit</button>
+                    </div>
+                  </form>
+                </div>
+                
               </div>
               <div class="table-responsive">
                
@@ -109,6 +125,8 @@
             ]
           });
         });
+
+        
       </script>
     
 

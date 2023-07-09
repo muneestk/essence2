@@ -37,7 +37,7 @@
                 <span> Order Id:</span><span class="font-weight-bold"><%= orders._id %></span></span><br>
                 <span>Address :</span><span class="font-weight-bold"><%= orders.deliveryAddress %></span></span><br>
                 <span>Expected Date :</span><span class="font-weight-bold"><%= expectedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).replace(/\//g,'-') %></span></span><br>
-                <a href="/invoice-download/<%= orders._id %>"><button class="btn btn-outline-primary my-3">Download invoice</button></a>
+                <!-- <a href="/invoice-download/<#%= orders._id %>"><button class="btn btn-outline-primary my-3">Download invoice</button></a> -->
             </div>
         </div>
 

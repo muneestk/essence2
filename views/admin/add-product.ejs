@@ -14,7 +14,7 @@
 
                 <% } %>
             </span>
-            <form class="forms-sample" method="post" action="/admin/insert-products" enctype="multipart/form-data">
+            <form class="forms-sample" method="post" action="/admin/insert-products" id="form" enctype="multipart/form-data">
               <div class="form-group">
                 <label for="exampleInputName1">Product Name</label>
                 <input type="text" class="form-control" id="exampleInputName1" name="productname" required>
@@ -59,7 +59,8 @@
                 <div class="form-group">
                   <label>File upload</label>
                   <input class="bt" style="height: 28px;width: 228px ; background-color: gray;color: white;"
-                    accept="Image/*" type="file" name="image" multiple required>
+                    accept="Image/*" type="file" name="image" id="image-validate" multiple required>
+                    <span id="image-error" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                   <label for="exampleInputCity1">Quantity</label>
@@ -82,7 +83,30 @@
       </div>
 
 
+    <script>
+      const imageValue = document.getElementById('image-validate');
+  const form = document.getElementById('form');
+  const imageError = document.getElementById('image-error');
 
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+
+    const image = imageValue.files[0];
+    if (!image) {
+      imageError.textContent = 'Please select an image';
+      return;
+    } else {
+      const allowedExtensions = /\.(jpg|jpeg|png|gif|webp)$/i;
+      if (!allowedExtensions.test(image.name)) {
+        imageError.textContent = "Invalid image file format";
+        return;
+      }
+      imageError.textContent = "";
+      form.submit();
+    }
+  });
+    </script>
 
 
 

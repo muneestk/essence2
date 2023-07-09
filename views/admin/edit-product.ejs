@@ -106,9 +106,10 @@
       </div>
 
       <!-- form starts -->
-      <form action="/admin/edit-product/updateimage/<%- product._id %>" method="post" enctype="multipart/form-data">
+      <form action="/admin/edit-product/updateimage/<%- product._id %>" id="form" method="post" enctype="multipart/form-data">
         <div class="modal-body">
-          <input multiple type="file" class="form-control" id="basic-default-name" name="image" />
+          <input multiple type="file" class="form-control" id="image-validate" name="image" />
+          <span id="image-error" class="text-danger"></span>
           <br>
 
           <% if (product.image && product.image.length > 0) { %>
@@ -130,5 +131,30 @@
     </div>
   </div>
 </div>
+<script>
+  const imageValue = document.getElementById('image-validate');
+const form = document.getElementById('form');
+const imageError = document.getElementById('image-error');
+
+form.addEventListener('submit', (e) => {
+e.preventDefault();
+
+
+const image = imageValue.files[0];
+if (!image) {
+  imageError.textContent = 'Please select an image';
+  return;
+} else {
+  const allowedExtensions = /\.(jpg|jpeg|png|gif|webp)$/i;
+  if (!allowedExtensions.test(image.name)) {
+    imageError.textContent = "Invalid image file format";
+    return;
+  }
+  imageError.textContent = "";
+  form.submit();
+}
+});
+</script>
+
 
 <%- include('../adminlayout/footer.ejs') %>
