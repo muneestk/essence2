@@ -3,7 +3,6 @@ const User = require("../models/user-models");
 const Product = require("../models/product-model");
 const Order = require('../models/order-modal')
 const razorpay = require('razorpay')
-const puppeteer = require('puppeteer')
 const fs = require('fs')
 const path = require('path')
 const ejs = require('ejs')
@@ -367,7 +366,6 @@ const loadOrderManagement = async(req,res) =>{
       const html = fs.readFileSync(filepathName).toString();
       const ejsData = ejs.render(html, data);
       
-      const browser = await puppeteer.launch({ headless: 'new' });
       const page = await browser.newPage();
       await page.setContent(ejsData, { waitUntil: 'networkidle0' });
       const pdfBytes = await page.pdf({ format: 'Letter' });

@@ -193,6 +193,7 @@
                            <% } %>
                       </form>
                       <% if (address !=0) { %>
+                        
                       <div class="mt-5">
                         <span class="text-left">Coupon Discount</span>
                         <span class="text-right"><a class="ec-checkout-coupon">Apply Coupon</a></span>
@@ -414,6 +415,7 @@
               url: '/delete-address',
               data: {
                 address: addId,
+    
                 userId: user
               },
               method: 'post',
